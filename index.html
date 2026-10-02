@@ -16,6 +16,7 @@
       --accent-cyan: #00f2fe;
       --accent-pink: #fe2c55;
       --accent-purple: #7928ca;
+      --accent-yellow: #f59e0b;
       --correct: #10b981;
       --correct-bg: rgba(16, 185, 129, 0.15);
       --wrong: #f43f5e;
@@ -207,7 +208,7 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
       padding: 20px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       transition: transform 0.2s, border-color 0.2s;
       position: relative;
     }
@@ -251,8 +252,68 @@
       font-size: 0.98rem;
       font-weight: 700;
       line-height: 1.45;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       color: #fff;
+    }
+
+    /* Hint Box Components */
+    .hint-container {
+      margin-bottom: 16px;
+    }
+
+    .hint-toggle-btn {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px dashed rgba(245, 158, 11, 0.5);
+      color: #fbbf24;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .hint-toggle-btn:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #fbbf24;
+      transform: translateY(-1px);
+    }
+
+    .hint-content-box {
+      margin-top: 8px;
+      background: #14161f;
+      border-left: 3px solid #f59e0b;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      color: #fde68a;
+      line-height: 1.45;
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .hint-content-box .hint-title {
+      font-weight: 800;
+      color: #f59e0b;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hint-content-box mark {
+      background: rgba(245, 158, 11, 0.25);
+      color: #fff;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 4px;
     }
 
     /* Options */
@@ -654,6 +715,7 @@
           { letter: "d", text: "Uma marca registrada de roupas que você vende na internet." }
         ],
         answer: "b",
+        hintPhrase: "Quando você sai de uma sala, sua verdadeira marca é a <mark>história e a lembrança do seu valor</mark> que continua viva na mente de quem ficou.",
         explanation: "A marca pessoal é a percepção, os valores e a lembrança positiva que você deixa nas pessoas."
       },
       {
@@ -668,6 +730,7 @@
           { letter: "d", text: "Copiar os talentos do influenciador que você mais gosta." }
         ],
         answer: "c",
+        hintPhrase: "Para descobrir seus superpoderes invisíveis, o melhor caminho é <mark>perguntar aos amigos e pessoas próximas sobre seus talentos reais</mark>.",
         explanation: "Colegas e amigos ajudam a apontar talentos naturais que muitas vezes nós mesmos ignoramos (superando pontos cegos)."
       },
       {
@@ -682,6 +745,7 @@
           { letter: "d", text: "A pergunta que o algoritmo faz antes de enviar o vídeo para a aba \"Para Você\"." }
         ],
         answer: "b",
+        hintPhrase: "O verdadeiro segredo dos grandes criadores não é só gravar vídeos, mas sim ter um <mark>motivo, propósito e valores inspiradores</mark> no coração.",
         explanation: "O \"Why\" de Simon Sinek foca na missão interna, valores e crença que motivam a ação."
       },
       {
@@ -691,11 +755,12 @@
         question: "O bilionário Warren Buffett tinha pavor de falar em público quando jovem, mas fez um curso e enfrentou o medo. O que esse exemplo nos ensina sobre construir uma marca forte?",
         options: [
           { letter: "a", text: "Que devemos fingir que não temos defeitos para parecer perfeitos." },
-          { letter: "b", text: "Que marcas fortes reconhecem suas fraquezas e enfrentam o desconforto para superá-las." },
+          { letter: "b", Que marcas fortes reconhecem suas fraquezas e enfrentam o desconforto para superá-las." },
           { letter: "c", text: "Que quem tem vergonha nunca deve tentar produzir conteúdo." },
           { letter: "d", text: "Que apenas quem nasce sem medo de câmera consegue ter sucesso." }
         ],
         answer: "b",
+        hintPhrase: "Quem deseja vencer na vida não foge da vergonha: pessoas de destaque <mark>reconhecem suas fraquezas e enfrentam o desconforto</mark> para evoluir.",
         explanation: "Superar fraquezas exige coragem de encarar o desconforto e buscar evolução."
       },
       {
@@ -710,6 +775,7 @@
           { letter: "d", text: "Deixando a plataforma escolher aleatoriamente o assunto do canal." }
         ],
         answer: "a",
+        hintPhrase: "O canal perfeito surge exatamente <mark>na união do que você gosta, do que faz bem e do que a galera quer assistir</mark>.",
         explanation: "O nicho ideal surge do equilíbrio entre o que você ama, o que você domina e o que o público demanda."
       },
       {
@@ -724,6 +790,7 @@
           { letter: "d", text: "O valor exato que você deseja cobrar para gravar um vídeo publicitário." }
         ],
         answer: "c",
+        hintPhrase: "Em poucas palavras, um perfil atraente precisa explicar <mark>quem você é, o que faz, por que faz e a quem você ajuda</mark> de forma simples.",
         explanation: "Um resumo direto, simples e objetivo de quem você é e a quem seu trabalho serve."
       },
       {
@@ -738,6 +805,7 @@
           { letter: "d", text: "O algoritmo do TikTok para de recomendar vídeos de contas que cresceram." }
         ],
         answer: "b",
+        hintPhrase: "Fique atento: quando a fama chega, <mark>o sucesso traz tantas opções e convites que o criador atira para todos os lados e perde o foco</mark>.",
         explanation: "O Paradoxo da Clareza mostra que o sucesso inicial atrai excesso de opções, o que pode dispersar a energia do criador."
       },
       {
@@ -752,6 +820,7 @@
           { letter: "d", text: "Porque as regras do aplicativo proíbem postar mais de um tema por ano." }
         ],
         answer: "b",
+        hintPhrase: "Quem tenta fazer tudo ao mesmo tempo se perde, pois isso <mark>destrói a clareza e o foco</mark> que conquistaram os fãs no começo.",
         explanation: "Sem foco, perde-se a clareza que causou o sucesso inicial."
       },
       {
@@ -766,6 +835,7 @@
           { letter: "d", text: "Ter no máximo 5 amigos nas redes sociais." }
         ],
         answer: "b",
+        hintPhrase: "Boas parcerias não surgem por acaso: é melhor <mark>focar a atenção nos 5 contatos mais importantes e ajudá-los de verdade</mark> primeiro.",
         explanation: "Focar em um grupo seleto de conexões estratégicas e agregar valor antes de pedir qualquer favor."
       },
       {
@@ -780,6 +850,7 @@
           { letter: "d", text: "É necessário postar 80 vídeos curtos para cada 20 vídeos longos." }
         ],
         answer: "c",
+        hintPhrase: "Na proporção mágica da internet, <mark>apenas 20% das suas boas conexões são responsáveis por 80% de todo o valor</mark> e portas abertas.",
         explanation: "Princípio 80/20: a maior parte dos resultados relevantes decorre de um número reduzido de parcerias de alto impacto."
       },
 
@@ -796,6 +867,7 @@
           { letter: "d", text: "18 anos." }
         ],
         answer: "d",
+        hintPhrase: "Para assinar contratos bancários e receber pagamentos diretos, as leis e o aplicativo exigem que a conta pertença a alguém com <mark>18 anos (maior de idade)</mark>.",
         explanation: "As diretrizes do programa exigem que o titular da conta tenha pelo menos 18 anos completos."
       },
       {
@@ -810,6 +882,7 @@
           { letter: "d", text: "Ter 1 milhão de curtidas em uma única publicação." }
         ],
         answer: "b",
+        hintPhrase: "Para desbloquear o painel dourado, o criador precisa alcançar <mark>10 mil seguidores fiéis e 100 mil visualizações mensais</mark>.",
         explanation: "O regulamento oficial de monetização exige 10 mil seguidores e 100 mil visualizações acumuladas nos últimos 30 dias."
       },
       {
@@ -824,6 +897,7 @@
           { letter: "d", text: "O vídeo deve ser um corte simples de um filme famoso." }
         ],
         answer: "b",
+        hintPhrase: "Para ganhar recompensa por visualização, seus conteúdos precisam ter <mark>mais de 60 segundos de duração e ser totalmente originais</mark>.",
         explanation: "Para o Programa de Recompensas, os vídeos devem ser autorais e durar mais de 1 minuto (60 segundos)."
       },
       {
@@ -838,6 +912,7 @@
           { letter: "d", text: "A sua própria visualização assistindo ao vídeo 10 vezes seguidas." }
         ],
         answer: "b",
+        hintPhrase: "O pagamento só é computado quando um usuário para no feed e <mark>assiste a pelo menos 5 segundos</mark> do seu vídeo longo.",
         explanation: "O TikTok só contabiliza visualizações qualificadas se o usuário assistir por mais de 5 segundos."
       },
       {
@@ -852,6 +927,7 @@
           { letter: "d", text: "Porque contas de empresas só podem postar fotos, e não vídeos." }
         ],
         answer: "b",
+        hintPhrase: "Contas comerciais de empresas sofrem com <mark>restrições de direitos autorais em músicas e sons virais em alta</mark>.",
         explanation: "Contas comerciais têm direitos autorais restritos a áudios corporativos, o que impede o uso de sons em alta elegíveis para o programa."
       },
       {
@@ -866,6 +942,7 @@
           { letter: "d", text: "O criador só recebe se fizer 24 horas ininterruptas de live." }
         ],
         answer: "b",
+        hintPhrase: "Nos presentes da live a divisão é de cinema: o aplicativo <mark>retém cerca de 50% de comissão</mark> da arrecadação.",
         explanation: "A plataforma retém aproximadamente 50% do valor dos presentes virtuais enviados na transmissão ao vivo."
       },
       {
@@ -880,6 +957,7 @@
           { letter: "d", text: "US$ 1.000." }
         ],
         answer: "c",
+        hintPhrase: "Para solicitar a transferência bancária dos diamantes, o saldo precisa atingir uma centena redonda: <mark>cem dólares (US$ 100)</mark>.",
         explanation: "O limite mínimo fixado para saque de rendimentos acumulados é de US$ 100."
       },
       {
@@ -894,6 +972,7 @@
           { letter: "d", text: "Um botão para doar seguidores para outro perfil." }
         ],
         answer: "a",
+        hintPhrase: "Ser afiliado é como ser um vendedor moderno: você <mark>indica produtos e ganha uma porcentagem de comissão por cada venda</mark>.",
         explanation: "O criador divulga produtos e recebe uma porcentagem sobre as compras realizadas a partir do seu link."
       },
       {
@@ -908,6 +987,7 @@
           { letter: "d", text: "O nível de bateria consumido pelo aplicativo ao reproduzir o vídeo." }
         ],
         answer: "b",
+        hintPhrase: "Na linguagem dos anúncios, CPM e RPM são <mark>métricas financeiras calculadas a cada 1.000 visualizações</mark>.",
         explanation: "CPM é Custo por Mil (para anunciantes) e RPM é Receita por Mil (recebida pelo criador a cada 1.000 visualizações válidas)."
       },
       {
@@ -922,6 +1002,7 @@
           { letter: "d", text: "Porque apenas adultos com mais de 50 anos assistem a vídeos de comédia." }
         ],
         answer: "b",
+        hintPhrase: "Temas como dinheiro e gadgets pagam melhor porque <mark>o público atrai marcas e anunciantes com orçamentos bem maiores</mark>.",
         explanation: "Anunciantes desses segmentos pagam mais porque atingem consumidores com maior poder aquisitivo e decisão de compra."
       },
 
@@ -938,6 +1019,7 @@
           { letter: "d", text: "Paga o dobro do valor por visualização." }
         ],
         answer: "b",
+        hintPhrase: "Quem apenas dá ctrl+c e ctrl+v em vídeos de outros tem o post marcado como <mark>conteúdo não original e perde alcance e monetização</mark>.",
         explanation: "Conteúdos reciclados sem alterações substanciais são classificados como não originais e perdem alcance e monetização."
       },
       {
@@ -952,6 +1034,7 @@
           { letter: "d", text: "Deixar o vídeo em preto e branco sem nenhum som." }
         ],
         answer: "b",
+        hintPhrase: "Editar como um profissional é <mark>aplicar mudanças profundas com cortes, nova narração, zoom dinâmico e efeitos sonoros</mark>.",
         explanation: "Trata-se de remodelar o vídeo com cortes dinâmicos, nova narração, sons e edições visuais originais."
       },
       {
@@ -966,6 +1049,7 @@
           { letter: "d", text: "Qualquer formato circular." }
         ],
         answer: "c",
+        hintPhrase: "Para preencher toda a tela do smartphone na posição em pé, a medida exata é o <mark>formato vertical 9:16</mark>.",
         explanation: "O padrão nativo do TikTok é a proporção vertical 9:16 (tela inteira de smartphone)."
       },
       {
@@ -980,6 +1064,7 @@
           { letter: "d", text: "Uma mensagem privada enviada para os seguidores." }
         ],
         answer: "b",
+        hintPhrase: "O gancho funciona como uma isca: é uma <mark>chamada ou cena impactante nos primeiros 3 segundos</mark> para ninguém passar o dedo.",
         explanation: "O gancho nos 3 primeiros segundos é crucial para deter o usuário no feed da plataforma."
       },
       {
@@ -994,6 +1079,7 @@
           { letter: "d", text: "10 minutos por cena." }
         ],
         answer: "a",
+        hintPhrase: "Para manter o vídeo rápido e elétrico na tela, o ideal é fatiar as cenas bem curtinhas, <mark>de 2 a 3 segundos por clipe</mark>.",
         explanation: "Cortes curtos de 2 a 3 segundos mantêm o ritmo ágil e evitam a detecção de blocos repetidos pelo algoritmo."
       },
       {
@@ -1008,6 +1094,7 @@
           { letter: "d", text: "Apagar a iluminação do quarto." }
         ],
         answer: "b",
+        hintPhrase: "Quando uma cena dura mais, o segredo é disfarçar o padrão <mark>combinando filtros visuais, zoom dinâmico e efeitos sonoros</mark>.",
         explanation: "Exige combinação de filtros visuais, alteração de enquadramento (zoom) e efeitos de áudio."
       },
       {
@@ -1022,6 +1109,7 @@
           { letter: "d", text: "Assistir ao vídeo três vezes antes de salvar." }
         ],
         answer: "b",
+        hintPhrase: "Para quebrar o reconhecimento de robôs, você deve <mark>inverter ou alterar a ordem das cenas, montando uma nova história</mark>.",
         explanation: "A quebra da ordem cronológica original cria uma narrativa inédita, descaracterizando a cópia direta."
       },
       {
@@ -1036,6 +1124,7 @@
           { letter: "d", text: "O botão que cancela a edição do vídeo." }
         ],
         answer: "b",
+        hintPhrase: "B-Roll são aquelas <mark>cenas secundárias de apoio e ilustrações que cobrem a fala</mark> para o vídeo não ficar parado.",
         explanation: "Cenas complementares de suporte que dinamizam a narrativa visual sobreposta à narração."
       },
       {
@@ -1050,6 +1139,7 @@
           { letter: "d", text: "É o nome da equipe de suporte que responde dúvidas no aplicativo." }
         ],
         answer: "b",
+        hintPhrase: "Para ser achado na lupinha de busca, o criador aplica SEO ao <mark>usar palavras-chave estratégicas na fala, na legenda e nas hashtags</mark>.",
         explanation: "Otimização de termos e palavras-chave na voz, legenda e texto para os mecanismos de busca interna da rede."
       },
       {
@@ -1064,6 +1154,7 @@
           { letter: "d", text: "Porque a inteligência artificial só entende vídeos legendados em inglês." }
         ],
         answer: "b",
+        hintPhrase: "Legendas coloridas prendem o olhar porque <mark>o texto dinâmico atrai os olhos e ajuda quem assiste sem som</mark>.",
         explanation: "Legendas dinâmicas retêm a atenção visual e auxiliam quem assiste sem fone de ouvido ou em locais com ruído."
       },
 
@@ -1080,6 +1171,7 @@
           { letter: "d", text: "A loja oficial para comprar produtos do aplicativo." }
         ],
         answer: "b",
+        hintPhrase: "A lendária For You é aquela <mark>página inicial personalizada que recomenda novos vídeos baseada nos seus gostos</mark>.",
         explanation: "A FYP (For You Page) é o feed algorítmico principal de descoberta para novos espectadores."
       },
       {
@@ -1094,6 +1186,7 @@
           { letter: "d", text: "O aplicativo mudou a cor do tema da tela para o modo noturno." }
         ],
         answer: "c",
+        hintPhrase: "O banimento sombra é assustador porque <mark>o alcance dos vídeos é bloqueado silenciosamente sem nenhum aviso</mark>.",
         explanation: "Restrição invisível imposta pelo sistema quando detecta comportamentos suspeitos ou infrações."
       },
       {
@@ -1108,6 +1201,7 @@
           { letter: "d", text: "A foto de perfil some sem explicação." }
         ],
         answer: "a",
+        hintPhrase: "O sinal mais comum de conta congelada é quando <mark>as visualizações travam em 50 a 200 views e o tráfego da FYP despenca</mark>.",
         explanation: "Estagnação abrupta no primeiro lote de visualizações (50 a 200) e ausência de entrega na aba \"Para Você\"."
       },
       {
@@ -1122,6 +1216,7 @@
           { letter: "d", text: "Usar uma trilha sonora liberada da biblioteca do aplicativo." }
         ],
         answer: "b",
+        hintPhrase: "O robô pune comportamentos de robô, como <mark>publicar rajadas de 5 a 10 vídeos em sequência ou posts repetidos</mark>.",
         explanation: "Postagens em massa automatizadas e envio contínuo de materiais reutilizados acionam o alerta do sistema."
       },
       {
@@ -1136,6 +1231,7 @@
           { letter: "d", text: "Deixar o telefone desligado por uma semana." }
         ],
         answer: "b",
+        hintPhrase: "Para testar a saúde da conta, o truque é <mark>postar um vídeo neutro e ver se ele chega à aba Para Você em até 90 minutos</mark>.",
         explanation: "Publicar um conteúdo neutro e observar se ele atinge a FYP dentro de 30 a 90 minutos."
       },
       {
@@ -1150,6 +1246,7 @@
           { letter: "d", text: "Trocar o nome de usuário dez vezes no mesmo dia." }
         ],
         answer: "b",
+        hintPhrase: "Para curar a conta, o tratamento consiste em <mark>pausar posts por 48 a 72 horas, limpar violações e voltar devagar</mark>.",
         explanation: "Dar uma pausa de 48 a 72 horas para limpar o histórico recente e retomar de forma lenta e orgânica."
       },
       {
@@ -1164,6 +1261,7 @@
           { letter: "d", text: "Um filtro que transforma fotos comuns em desenhos animados." }
         ],
         answer: "b",
+        hintPhrase: "O Studio é o laboratório do influenciador: é o <mark>painel de ferramentas com dados e métricas de desempenho dos vídeos</mark>.",
         explanation: "Central de dados analíticos oficial da plataforma para acompanhar o desempenho e as métricas da conta."
       },
       {
@@ -1178,6 +1276,7 @@
           { letter: "d", text: "Porque ter uma empresa garante que todos os vídeos fiquem virais." }
         ],
         answer: "a",
+        hintPhrase: "Criadores profissionais abrem CNPJ porque <mark>como empresa no Simples Nacional os impostos são bem menores do que na Pessoa Física</mark>.",
         explanation: "Formalizar como Pessoa Jurídica (Simples Nacional) reduz a alíquota de impostos sobre os ganhos de criador em comparação com as taxas de Pessoa Física."
       },
       {
@@ -1192,6 +1291,7 @@
           { letter: "d", text: "Um aplicativo exclusivo para desenhar na tela." }
         ],
         answer: "b",
+        hintPhrase: "Mesmo sem foto, a internet sabe quem você é através do <mark>conjunto de dados técnicos que identifica o aparelho, navegador e endereço de IP</mark>.",
         explanation: "Parâmetros técnicos do sistema e da rede que permitem ao algoritmo saber se vários perfis pertencem ao mesmo usuário ou computador."
       },
       {
@@ -1206,6 +1306,7 @@
           { letter: "d", text: "Gastar todo o tempo nas redes sociais sem cuidar dos estudos e da saúde." }
         ],
         answer: "b",
+        hintPhrase: "O verdadeiro sucesso duradouro nasce de <mark>ter autenticidade, respeitar regras de direitos autorais e criar laços de confiança</mark>.",
         explanation: "O sucesso sustentável depende de ética, consistência, respeito às regras e conexão genuína com as pessoas."
       }
     ];
@@ -1213,6 +1314,20 @@
     let userAnswers = {};
     let score = 0;
     let currentFilter = 'all';
+
+    function toggleHint(questionId) {
+      const hintBox = document.getElementById(`hint-box-${questionId}`);
+      const btn = document.getElementById(`hint-btn-${questionId}`);
+      if (!hintBox) return;
+
+      if (hintBox.style.display === 'none' || hintBox.style.display === '') {
+        hintBox.style.display = 'block';
+        btn.innerHTML = '💡 Ocultar Dica 🤫';
+      } else {
+        hintBox.style.display = 'none';
+        btn.innerHTML = '💡 Dica Secreta (Espiar)';
+      }
+    }
 
     function renderQuestions() {
       const container = document.getElementById('questions-list');
@@ -1257,6 +1372,18 @@
             <span class="q-block-tag">Bloco ${q.block}</span>
           </div>
           <div class="q-text">${q.question}</div>
+          
+          <!-- Espaço de Dica Escondida -->
+          <div class="hint-container">
+            <button type="button" class="hint-toggle-btn" id="hint-btn-${q.id}" onclick="toggleHint(${q.id})">
+              💡 Dica Secreta (Espiar)
+            </button>
+            <div class="hint-content-box" id="hint-box-${q.id}">
+              <div class="hint-title">🕵️ Pista Enigmática:</div>
+              "${q.hintPhrase}"
+            </div>
+          </div>
+
           <div class="options-list" id="opts-${q.id}">
             ${optionsHtml}
           </div>
