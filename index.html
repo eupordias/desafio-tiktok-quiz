@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Desafio Criador de Conteúdo 🚀 TikTok Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0f1015;
+      --card-bg: #191b24;
+      --card-border: #282c3c;
+      --accent-cyan: #00f2fe;
+      --accent-pink: #fe2c55;
+      --accent-purple: #7928ca;
+      --correct: #10b981;
+      --correct-bg: rgba(16, 185, 129, 0.15);
+      --wrong: #f43f5e;
+      --wrong-bg: rgba(244, 63, 94, 0.15);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 90px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(254, 44, 85, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 242, 254, 0.08) 0%, transparent 40%);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 16, 21, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 16px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, #fff, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-badge span.icon {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
+      border-radius: 8px;
+      padding: 4px 6px;
+      font-size: 0.9rem;
+      -webkit-text-fill-color: initial;
+    }
+
+    .score-badge {
+      background: linear-gradient(135deg, rgba(254, 44, 85, 0.2), rgba(0, 242, 254, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #252836;
+      border-radius: 99px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    .main-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Student Info Box */
+    .student-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .student-card h2 {
+      font-size: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .student-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .student-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .student-input {
+      flex: 1;
+      background: #0f1015;
+      border: 1px solid #33394d;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .student-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* Block filter pill tabs */
+    .block-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .block-tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex-shrink: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-pink), #e11d48);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(254, 44, 85, 0.4);
+    }
+
+    /* Question Cards */
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 18px;
+      transition: transform 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .question-card.answered-correct {
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .question-card.answered-wrong {
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .q-num {
+      background: #272a38;
+      color: var(--accent-cyan);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .q-block-tag {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .q-text {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    /* Options */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: #12131a;
+      border: 1.5px solid #2a2e40;
+      border-radius: var(--radius-sm);
+      color: #d1d5db;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      line-height: 1.35;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .opt-letter {
+      background: #252836;
+      color: #9ca3af;
+      font-weight: 800;
+      font-size: 0.75rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent-cyan);
+      background: #171924;
+      transform: translateY(-1px);
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    /* Status classes when answered */
+    .option-btn.selected-correct {
+      background: var(--correct-bg) !important;
+      border-color: var(--correct) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+    .option-btn.selected-correct .opt-letter {
+      background: var(--correct);
+      color: #000;
+    }
+
+    .option-btn.selected-wrong {
+      background: var(--wrong-bg) !important;
+      border-color: var(--wrong) !important;
+      color: #fb7185 !important;
+    }
+    .option-btn.selected-wrong .opt-letter {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    .option-btn.show-as-correct {
+      border-color: var(--correct) !important;
+      background: rgba(16, 185, 129, 0.08) !important;
+      color: #34d399 !important;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+      opacity: 0.95;
+    }
+
+    /* Explanation popup */
+    .explanation-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.83rem;
+      line-height: 1.4;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explanation-box.correct {
+      background: rgba(16, 185, 129, 0.12);
+      border-left: 4px solid var(--correct);
+      color: #d1fae5;
+    }
+
+    .explanation-box.wrong {
+      background: rgba(244, 63, 94, 0.12);
+      border-left: 4px solid var(--wrong);
+      color: #ffe4e6;
+    }
+
+    .explanation-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.88rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating / Sticky Footer summary */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 16, 21, 0.95);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--card-border);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      z-index: 99;
+    }
+
+    .summary-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .btn-finish {
+      background: linear-gradient(135deg, var(--accent-pink), #7928ca);
+      border: none;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(254, 44, 85, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-finish:active {
+      transform: scale(0.95);
+    }
+
+    /* Results Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-card {
+      background: #191b24;
+      border: 1px solid #33394d;
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      width: 100%;
+      padding: 24px 20px;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    .modal-trophy {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal-score-big {
+      font-size: 2.8rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      color: #fff;
+      margin: 10px 0;
+    }
+
+    .modal-score-big span {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    .modal-badge-rank {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.08);
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0,242,254,0.3);
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      background: #111218;
+      border: 1px solid #282c3c;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-item .val {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .stat-item .lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-share {
+      background: #25d366;
+      color: #000;
+      font-weight: 800;
+      font-family: inherit;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .btn-secondary {
+      background: #282c3c;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="header-top">
+      <div class="logo-badge">
+        <span class="icon">📱</span> TikTok Quiz 🚀
+      </div>
+      <div class="score-badge">
+        <span>⭐</span> Pontos: <span id="current-score">0</span> / 40
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    
+    <!-- Student Name Card -->
+    <section class="student-card">
+      <h2>👤 Identificação do Aluno(a)</h2>
+      <p>Digite seu nome para registrar sua pontuação e gerar seu certificado no final:</p>
+      <div class="student-input-group">
+        <input type="text" id="student-name" class="student-input" placeholder="Ex: Lucas Silva - 7º Ano B" />
+      </div>
+    </section>
+
+    <!-- Block navigation tabs -->
+    <div class="block-tabs">
+      <button class="tab-btn active" onclick="filterBlock('all')">🎯 Todas (40)</button>
+      <button class="tab-btn" onclick="filterBlock(1)">🌟 Bloco 1 (1-10)</button>
+      <button class="tab-btn" onclick="filterBlock(2)">💰 Bloco 2 (11-20)</button>
+      <button class="tab-btn" onclick="filterBlock(3)">🎬 Bloco 3 (21-30)</button>
+      <button class="tab-btn" onclick="filterBlock(4)">🛡️ Bloco 4 (31-40)</button>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="questions-list"></div>
+
+  </main>
+
+  <!-- Bottom Floating Summary Bar -->
+  <footer class="bottom-nav">
+    <div class="summary-text">
+      Respondidas: <span id="answered-count" style="color: var(--accent-cyan)">0</span>/40
+    </div>
+    <button class="btn-finish" onclick="openResultsModal()">Ver Resultado 🏆</button>
+  </footer>
+
+  <!-- Results Modal -->
+  <div class="modal-overlay" id="results-modal">
+    <div class="modal-card">
+      <div class="modal-trophy" id="modal-trophy">🏆</div>
+      <h3 class="modal-title" id="modal-title">Incrível!</h3>
+      <div class="modal-badge-rank" id="modal-rank">Criador Lendário 🌟</div>
+      
+      <div class="modal-score-big" id="modal-score-val">
+        0 <span>/ 40 acertos</span>
+      </div>
+
+      <div class="result-stats">
+        <div class="stat-item">
+          <div class="val" id="stat-correct" style="color: var(--correct)">0</div>
+          <div class="lbl">Acertos ✅</div>
+        </div>
+        <div class="stat-item">
+          <div class="val" id="stat-wrong" style="color: var(--wrong)">0</div>
+          <div class="lbl">Erros ❌</div>
+        </div>
+        <div class="stat-item">
+          <div class="val" id="stat-percent">0%</div>
+          <div class="lbl">Aproveitamento 📊</div>
+        </div>
+        <div class="stat-item">
+          <div class="val" id="stat-student">Aluno</div>
+          <div class="lbl">Nome</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-share" onclick="shareToWhatsApp()">
+          📲 Enviar Resultado no WhatsApp
+        </button>
+        <button class="btn-secondary" onclick="closeResultsModal()">
+          Revisar Respostas 🔍
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      // BLOCO 1
+      {
+        id: 1,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "O que é uma \"marca pessoal\" de acordo com o especialista Jay Harrington?",
+        options: [
+          { letter: "a", text: "A foto de perfil e a logo que você desenhou para o canal." },
+          { letter: "b", text: "A história e a lembrança do seu valor que as pessoas têm de você, mesmo quando você não está presente." },
+          { letter: "c", text: "Apenas o número de seguidores que você tem na conta." },
+          { letter: "d", text: "Uma marca registrada de roupas que você vende na internet." }
+        ],
+        answer: "b",
+        explanation: "A marca pessoal é a percepção, os valores e a lembrança positiva que você deixa nas pessoas."
+      },
+      {
+        id: 2,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "Para descobrir quais são seus pontos fortes na criação de conteúdo, qual é a melhor estratégia?",
+        options: [
+          { letter: "a", text: "Usar palavras genéricas como \"sou legal\", \"sou fiel\" e \"sou honesto\"." },
+          { letter: "b", text: "Apenas adivinhar sozinho, pois ninguém nos conhece melhor do que nós mesmos." },
+          { letter: "c", text: "Perguntar a amigos e pessoas próximas sobre seus talentos reais para identificar habilidades naturais que você mesmo nem percebe." },
+          { letter: "d", text: "Copiar os talentos do influenciador que você mais gosta." }
+        ],
+        answer: "c",
+        explanation: "Colegas e amigos ajudam a apontar talentos naturais que muitas vezes nós mesmos ignoramos (superando pontos cegos)."
+      },
+      {
+        id: 3,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "O que significa o \"Why\" (ou o \"Porquê\") criado por Simon Sinek?",
+        options: [
+          { letter: "a", text: "A quantidade de visualizações que você quer atingir em um mês." },
+          { letter: "b", text: "O motivo, o propósito e os valores que inspiram você a criar conteúdo, indo além do que você simplesmente faz." },
+          { letter: "c", text: "A ferramenta de edição que você utiliza no celular." },
+          { letter: "d", text: "A pergunta que o algoritmo faz antes de enviar o vídeo para a aba \"Para Você\"." }
+        ],
+        answer: "b",
+        explanation: "O \"Why\" de Simon Sinek foca na missão interna, valores e crença que motivam a ação."
+      },
+      {
+        id: 4,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "O bilionário Warren Buffett tinha pavor de falar em público quando jovem, mas fez um curso e enfrentou o medo. O que esse exemplo nos ensina sobre construir uma marca forte?",
+        options: [
+          { letter: "a", text: "Que devemos fingir que não temos defeitos para parecer perfeitos." },
+          { letter: "b", text: "Que marcas fortes reconhecem suas fraquezas e enfrentam o desconforto para superá-las." },
+          { letter: "c", text: "Que quem tem vergonha nunca deve tentar produzir conteúdo." },
+          { letter: "d", text: "Que apenas quem nasce sem medo de câmera consegue ter sucesso." }
+        ],
+        answer: "b",
+        explanation: "Superar fraquezas exige coragem de encarar o desconforto e buscar evolução."
+      },
+      {
+        id: 5,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "Como um criador de conteúdo encontra o seu \"Nicho de Especialista\"?",
+        options: [
+          { letter: "a", text: "Na união entre: o que ele gosta (interesses) + o que ele sabe fazer bem (habilidades) + o que as pessoas querem ver (oportunidades de mercado)." },
+          { letter: "b", text: "Falando sobre todos os assuntos possíveis no mesmo perfil todos os dias." },
+          { letter: "c", text: "Copiando exatamente o tema mais falado da semana, mesmo sem entender nada sobre ele." },
+          { letter: "d", text: "Deixando a plataforma escolher aleatoriamente o assunto do canal." }
+        ],
+        answer: "a",
+        explanation: "O nicho ideal surge do equilíbrio entre o que você ama, o que você domina e o que o público demanda."
+      },
+      {
+        id: 6,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "A Declaração de Marca Pessoal deve ser um texto curto (de 5 a 6 frases). O que ela deve comunicar principalmente?",
+        options: [
+          { letter: "a", text: "Uma lista completa de todas as séries que você assistiu e jogos que você zerou." },
+          { letter: "b", text: "Apenas o seu nome e sua idade." },
+          { letter: "c", text: "Quem você é, o que faz, por que faz e a quem você ajuda, em um tom autêntico e sem palavras difíceis." },
+          { letter: "d", text: "O valor exato que você deseja cobrar para gravar um vídeo publicitário." }
+        ],
+        answer: "c",
+        explanation: "Um resumo direto, simples e objetivo de quem você é e a quem seu trabalho serve."
+      },
+      {
+        id: 7,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "De acordo com o \"Paradoxo da Clareza\", o que costuma acontecer na Fase 2 e na Fase 3 quando um perfil começa a fazer muito sucesso?",
+        options: [
+          { letter: "a", text: "A conta é banida automaticamente por excesso de público." },
+          { letter: "b", text: "O sucesso traz tantas novas oportunidades e convites que a pessoa acaba atirando para todos os lados e perde o foco inicial." },
+          { letter: "c", text: "O criador para de receber comentários e curtidas." },
+          { letter: "d", text: "O algoritmo do TikTok para de recomendar vídeos de contas que cresceram." }
+        ],
+        answer: "b",
+        explanation: "O Paradoxo da Clareza mostra que o sucesso inicial atrai excesso de opções, o que pode dispersar a energia do criador."
+      },
+      {
+        id: 8,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "Por que \"esforços dispersos\" (tentar fazer de tudo ao mesmo tempo) podem prejudicar um canal que estava indo bem?",
+        options: [
+          { letter: "a", text: "Porque o celular fica sem bateria mais rápido." },
+          { letter: "b", text: "Porque destrói a clareza e o foco que trouxeram o sucesso em primeiro lugar." },
+          { letter: "c", text: "Porque os seguidores preferem canais sem nenhum foco específico." },
+          { letter: "d", text: "Porque as regras do aplicativo proíbem postar mais de um tema por ano." }
+        ],
+        answer: "b",
+        explanation: "Sem foco, perde-se a clareza que causou o sucesso inicial."
+      },
+      {
+        id: 9,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "O que diz a \"Regra dos 5\" no networking (fazer contatos profissionais)?",
+        options: [
+          { letter: "a", text: "Seguir exatamente 5 contas por dia." },
+          { letter: "b", text: "Focar a atenção nos 5 contatos mais importantes e ajudá-los de verdade antes de pedir qualquer favor." },
+          { letter: "c", text: "Mandar mensagens automáticas para 5 pessoas desconhecidas todos os dias pedindo parcerias." },
+          { letter: "d", text: "Ter no máximo 5 amigos nas redes sociais." }
+        ],
+        answer: "b",
+        explanation: "Focar em um grupo seleto de conexões estratégicas e agregar valor antes de pedir qualquer favor."
+      },
+      {
+        id: 10,
+        block: 1,
+        blockTitle: "Sua Marca Pessoal e Nicho",
+        question: "A regra do networking baseia-se no princípio 80/20 (Pareto). No caso dos relacionamentos profissionais, isso significa que:",
+        options: [
+          { letter: "a", text: "80% dos seus contatos trarão problemas e 20% trarão lucros." },
+          { letter: "b", text: "Você precisa gastar 80 horas por dia no aplicativo." },
+          { letter: "c", text: "Cerca de 20% das suas conexões e parcerias representam 80% do valor e das oportunidades geradas." },
+          { letter: "d", text: "É necessário postar 80 vídeos curtos para cada 20 vídeos longos." }
+        ],
+        answer: "c",
+        explanation: "Princípio 80/20: a maior parte dos resultados relevantes decorre de um número reduzido de parcerias de alto impacto."
+      },
+
+      // BLOCO 2
+      {
+        id: 11,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Para participar do Programa de Recompensas para Criadores no TikTok, qual é a idade mínima exigida pela plataforma?",
+        options: [
+          { letter: "a", text: "12 anos." },
+          { letter: "b", text: "14 anos." },
+          { letter: "c", text: "16 anos." },
+          { letter: "d", text: "18 anos." }
+        ],
+        answer: "d",
+        explanation: "As diretrizes do programa exigem que o titular da conta tenha pelo menos 18 anos completos."
+      },
+      {
+        id: 12,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Além da idade, quais metas de números a conta precisa bater para entrar no Programa de Recompensas?",
+        options: [
+          { letter: "a", text: "Ter no mínimo 1.000 seguidores e 10.000 visualizações no último mês." },
+          { letter: "b", text: "Ter no mínimo 10.000 seguidores e 100.000 visualizações nos últimos 30 dias." },
+          { letter: "c", text: "Ter 500 seguidores e 5 vídeos publicados." },
+          { letter: "d", text: "Ter 1 milhão de curtidas em uma única publicação." }
+        ],
+        answer: "b",
+        explanation: "O regulamento oficial de monetização exige 10 mil seguidores e 100 mil visualizações acumuladas nos últimos 30 dias."
+      },
+      {
+        id: 13,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Sobre o formato dos vídeos para monetizar no Programa de Recompensas, qual destas regras é obrigatória?",
+        options: [
+          { letter: "a", text: "Os vídeos devem ter menos de 15 segundos." },
+          { letter: "b", text: "Os vídeos devem ter mais de 60 segundos (1 minuto) e ser 100% originais." },
+          { letter: "c", text: "Os vídeos precisam ser gravados na horizontal e sem áudio." },
+          { letter: "d", text: "O vídeo deve ser um corte simples de um filme famoso." }
+        ],
+        answer: "b",
+        explanation: "Para o Programa de Recompensas, os vídeos devem ser autorais e durar mais de 1 minuto (60 segundos)."
+      },
+      {
+        id: 14,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "O que é uma \"visualização qualificada\" para o TikTok pagar pelo vídeo?",
+        options: [
+          { letter: "a", text: "Qualquer pessoa que passe o dedo no vídeo por 1 segundo." },
+          { letter: "b", text: "Uma visualização em que a pessoa assista a pelo menos 5 segundos do vídeo com mais de 60 segundos." },
+          { letter: "c", text: "Uma pessoa que apenas deixa um comentário sem assistir ao vídeo." },
+          { letter: "d", text: "A sua própria visualização assistindo ao vídeo 10 vezes seguidas." }
+        ],
+        answer: "b",
+        explanation: "O TikTok só contabiliza visualizações qualificadas se o usuário assistir por mais de 5 segundos."
+      },
+      {
+        id: 15,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Por que perfis configurados como \"Conta Corporativa/Business\" não podem participar do Programa de Recompensas de visualizações?",
+        options: [
+          { letter: "a", text: "Porque empresas não têm direito a receber nenhum dinheiro." },
+          { letter: "b", text: "Porque elas têm restrições de direitos autorais e não podem usar livremente as músicas e sons populares em alta." },
+          { letter: "c", text: "Porque o TikTok só aceita contas de animais de estimação." },
+          { letter: "d", text: "Porque contas de empresas só podem postar fotos, e não vídeos." }
+        ],
+        answer: "b",
+        explanation: "Contas comerciais têm direitos autorais restritos a áudios corporativos, o que impede o uso de sons em alta elegíveis para o programa."
+      },
+      {
+        id: 16,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Durante uma transmissão ao vivo (LIVE), os espectadores podem enviar presentes virtuais comprados com Moedas. No final, esses presentes viram \"Diamantes\" para o criador. O que a plataforma faz com o valor?",
+        options: [
+          { letter: "a", text: "O criador fica com 100% do valor e não paga nada." },
+          { letter: "b", text: "O TikTok retém cerca de 50% do valor arrecadado." },
+          { letter: "c", text: "Todo o dinheiro é transformado em cupons de desconto para jogos." },
+          { letter: "d", text: "O criador só recebe se fizer 24 horas ininterruptas de live." }
+        ],
+        answer: "b",
+        explanation: "A plataforma retém aproximadamente 50% do valor dos presentes virtuais enviados na transmissão ao vivo."
+      },
+      {
+        id: 17,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Qual é o valor mínimo em dinheiro que o criador precisa acumular de presentes de LIVE para conseguir fazer o saque?",
+        options: [
+          { letter: "a", text: "US$ 10." },
+          { letter: "b", text: "US$ 50." },
+          { letter: "c", text: "US$ 100." },
+          { letter: "d", text: "US$ 1.000." }
+        ],
+        answer: "c",
+        explanation: "O limite mínimo fixado para saque de rendimentos acumulados é de US$ 100."
+      },
+      {
+        id: 18,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "O que é o sistema de \"Afiliados / TikTok Shop\"?",
+        options: [
+          { letter: "a", text: "Uma ferramenta para indicar produtos em vídeos e lives e ganhar uma comissão (de 5% a 30%) sobre as vendas." },
+          { letter: "b", text: "Um sorteio semanal em que os seguidores ganham celulares grátis." },
+          { letter: "c", text: "Uma taxa que você paga ao aplicativo para poder comprar roupas." },
+          { letter: "d", text: "Um botão para doar seguidores para outro perfil." }
+        ],
+        answer: "a",
+        explanation: "O criador divulga produtos e recebe uma porcentagem sobre as compras realizadas a partir do seu link."
+      },
+      {
+        id: 19,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "O que significam as siglas CPM e RPM no universo dos vídeos digitais?",
+        options: [
+          { letter: "a", text: "A quantidade de cliques por minuto e o número de curtidas por segundo." },
+          { letter: "b", text: "Métricas que calculam o valor financeiro (custo para o anunciante e receita paga ao criador) a cada 1.000 visualizações." },
+          { letter: "c", text: "O tipo de câmera utilizada para gravar vídeos em alta definição." },
+          { letter: "d", text: "O nível de bateria consumido pelo aplicativo ao reproduzir o vídeo." }
+        ],
+        answer: "b",
+        explanation: "CPM é Custo por Mil (para anunciantes) e RPM é Receita por Mil (recebida pelo criador a cada 1.000 visualizações válidas)."
+      },
+      {
+        id: 20,
+        block: 2,
+        blockTitle: "Como Funciona a Fama e o Dinheiro (Monetização)",
+        question: "Segundo o guia, por que nichos como Finanças e Tecnologia pagam um RPM mais alto do que nichos de Comédia e Memes?",
+        options: [
+          { letter: "a", text: "Porque fazer piadas é proibido nas regras de monetização." },
+          { letter: "b", text: "Porque o público desses temas geralmente atrai anunciantes com orçamentos maiores, dispostos a pagar mais para vender produtos e serviços de maior valor." },
+          { letter: "c", text: "Porque os vídeos de finanças usam filtros mais caros." },
+          { letter: "d", text: "Porque apenas adultos com mais de 50 anos assistem a vídeos de comédia." }
+        ],
+        answer: "b",
+        explanation: "Anunciantes desses segmentos pagam mais porque atingem consumidores com maior poder aquisitivo e decisão de compra."
+      },
+
+      // BLOCO 3
+      {
+        id: 21,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que o TikTok faz quando percebe que um perfil apenas baixa vídeos alheios (como trechos de filmes, gameplays ou podcasts) e posta sem nenhuma alteração?",
+        options: [
+          { letter: "a", text: "Promove o vídeo para milhões de pessoas." },
+          { letter: "b", text: "Considera \"conteúdo não original\" e desqualifica o vídeo da monetização e do alcance." },
+          { letter: "c", text: "Dá um selo de verificação azul para a conta." },
+          { letter: "d", text: "Paga o dobro do valor por visualização." }
+        ],
+        answer: "b",
+        explanation: "Conteúdos reciclados sem alterações substanciais são classificados como não originais e perdem alcance e monetização."
+      },
+      {
+        id: 22,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que é a chamada \"Edição Transformadora\"?",
+        options: [
+          { letter: "a", text: "Apenas colocar uma figurinha dançando no canto da tela." },
+          { letter: "b", text: "Aplicar mudanças profundas no material (novos cortes, narração autoral, zoom dinâmico, efeitos e sons) para criar um trabalho novo e original." },
+          { letter: "c", text: "Aumentar a velocidade do vídeo em 10 vezes até ficar incompreensível." },
+          { letter: "d", text: "Deixar o vídeo em preto e branco sem nenhum som." }
+        ],
+        answer: "b",
+        explanation: "Trata-se de remodelar o vídeo com cortes dinâmicos, nova narração, sons e edições visuais originais."
+      },
+      {
+        id: 23,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "Qual é o formato e a proporção de tela recomendados para vídeos no TikTok?",
+        options: [
+          { letter: "a", text: "Formato quadrado (1:1)." },
+          { letter: "b", text: "Formato cinema horizontal (16:9)." },
+          { letter: "c", text: "Formato vertical em tela cheia (9:16)." },
+          { letter: "d", text: "Qualquer formato circular." }
+        ],
+        answer: "c",
+        explanation: "O padrão nativo do TikTok é a proporção vertical 9:16 (tela inteira de smartphone)."
+      },
+      {
+        id: 24,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que é um \"Hook\" (ou gancho) em um vídeo curto e por que ele é tão importante?",
+        options: [
+          { letter: "a", text: "A música de encerramento do vídeo." },
+          { letter: "b", text: "Uma chamada ou cena impactante nos primeiros 3 segundos para prender a atenção e impedir que a pessoa deslize a tela." },
+          { letter: "c", text: "O link que fica na biografia do criador." },
+          { letter: "d", text: "Uma mensagem privada enviada para os seguidores." }
+        ],
+        answer: "b",
+        explanation: "O gancho nos 3 primeiros segundos é crucial para deter o usuário no feed da plataforma."
+      },
+      {
+        id: 25,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "De acordo com as técnicas de corte rápido recomendadas para evitar que o algoritmo identifique repetição, qual é a duração sugerida para cada trecho/clipe de vídeo?",
+        options: [
+          { letter: "a", text: "De 2 a 3 segundos por clipe." },
+          { letter: "b", text: "No mínimo 30 segundos sem cortes." },
+          { letter: "c", text: "Pelo menos 2 minutos contínuos." },
+          { letter: "d", text: "10 minutos por cena." }
+        ],
+        answer: "a",
+        explanation: "Cortes curtos de 2 a 3 segundos mantêm o ritmo ágil e evitam a detecção de blocos repetidos pelo algoritmo."
+      },
+      {
+        id: 26,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "Se um trecho de vídeo ultrapassar 2 segundos, quais modificações o editor deve combinar para torná-lo original perante o algoritmo?",
+        options: [
+          { letter: "a", text: "Não fazer nada e torcer para ninguém perceber." },
+          { letter: "b", text: "Usar combinação de filtros visuais, aplicar zoom dinâmico e inserir efeitos sonoros nas pausas." },
+          { letter: "c", text: "Apenas silenciar todo o áudio do vídeo." },
+          { letter: "d", text: "Apagar a iluminação do quarto." }
+        ],
+        answer: "b",
+        explanation: "Exige combinação de filtros visuais, alteração de enquadramento (zoom) e efeitos de áudio."
+      },
+      {
+        id: 27,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que se deve fazer com a ordem original dos clipes baixados de uma fonte para evitar a desqualificação por cópia?",
+        options: [
+          { letter: "a", text: "Manter exatamente na mesma ordem do vídeo original." },
+          { letter: "b", text: "Inverter ou alterar a sequência das partes, montando uma nova linha de história." },
+          { letter: "c", text: "Postar o vídeo de trás para frente em câmera lenta." },
+          { letter: "d", text: "Assistir ao vídeo três vezes antes de salvar." }
+        ],
+        answer: "b",
+        explanation: "A quebra da ordem cronológica original cria uma narrativa inédita, descaracterizando a cópia direta."
+      },
+      {
+        id: 28,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que significa o termo B-Roll no mundo da edição?",
+        options: [
+          { letter: "a", text: "A gravação principal onde a pessoa fica parada falando para a câmera." },
+          { letter: "b", text: "Cenas secundárias de apoio (imagens ilustrativas, detalhes, objetos) que cobrem a fala para tornar o vídeo mais dinâmico e interessante." },
+          { letter: "c", text: "O erro de gravação que deve ser postado nos stories." },
+          { letter: "d", text: "O botão que cancela a edição do vídeo." }
+        ],
+        answer: "b",
+        explanation: "Cenas complementares de suporte que dinamizam a narrativa visual sobreposta à narração."
+      },
+      {
+        id: 29,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "O que é o SEO no TikTok e como ele ajuda um vídeo a ser encontrado?",
+        options: [
+          { letter: "a", text: "É um filtro que deixa a pele mais clara." },
+          { letter: "b", text: "É a técnica de usar palavras-chave estratégicas na fala, na legenda e nas hashtags para que o vídeo apareça quando as pessoas pesquisarem pelo assunto." },
+          { letter: "c", text: "É o pagamento de mensalidade para o criador ter acesso à câmera." },
+          { letter: "d", text: "É o nome da equipe de suporte que responde dúvidas no aplicativo." }
+        ],
+        answer: "b",
+        explanation: "Otimização de termos e palavras-chave na voz, legenda e texto para os mecanismos de busca interna da rede."
+      },
+      {
+        id: 30,
+        block: 3,
+        blockTitle: "Truques de Edição e Retenção",
+        question: "Por que colocar legendas automáticas chamativas e dinâmicas (com palavras destacadas e cores) ajuda a manter as pessoas assistindo ao vídeo?",
+        options: [
+          { letter: "a", text: "Porque a maioria das pessoas não gosta de ouvir áudio de jeito nenhum." },
+          { letter: "b", text: "Porque o texto em movimento atrai os olhos e facilita o acompanhamento mesmo em ambientes barulhentos ou sem som, aumentando a retenção." },
+          { letter: "c", text: "Porque o aplicativo só entrega vídeos que tenham mais de 500 palavras escritas." },
+          { letter: "d", text: "Porque a inteligência artificial só entende vídeos legendados em inglês." }
+        ],
+        answer: "b",
+        explanation: "Legendas dinâmicas retêm a atenção visual e auxiliam quem assiste sem fone de ouvido ou em locais com ruído."
+      },
+
+      // BLOCO 4
+      {
+        id: 31,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "O que é a página \"FYP\" (For You Page / \"Para Você\") do TikTok?",
+        options: [
+          { letter: "a", text: "A tela onde ficam armazenadas as mensagens privadas com seus amigos." },
+          { letter: "b", text: "A página inicial personalizada onde o algoritmo recomenda novos vídeos de acordo com os gostos do usuário, mesmo de perfis que ele ainda não segue." },
+          { letter: "c", text: "O menu onde você altera sua senha de login." },
+          { letter: "d", text: "A loja oficial para comprar produtos do aplicativo." }
+        ],
+        answer: "b",
+        explanation: "A FYP (For You Page) é o feed algorítmico principal de descoberta para novos espectadores."
+      },
+      {
+        id: 32,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "O que significa quando dizem que uma conta levou um Shadowban?",
+        options: [
+          { letter: "a", text: "A conta foi apagada para sempre e não pode ser recuperada." },
+          { letter: "b", text: "O aplicativo entregou uma recompensa em dinheiro para o dono do perfil." },
+          { letter: "c", text: "O alcance dos vídeos é bloqueado silenciosamente pelo algoritmo, parando de ser entregue para novas pessoas na aba \"Para Você\"." },
+          { letter: "d", text: "O aplicativo mudou a cor do tema da tela para o modo noturno." }
+        ],
+        answer: "c",
+        explanation: "Restrição invisível imposta pelo sistema quando detecta comportamentos suspeitos ou infrações."
+      },
+      {
+        id: 33,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "Qual costuma ser o sintoma mais claro de que um perfil está enfrentando um Shadowban?",
+        options: [
+          { letter: "a", text: "As visualizações ficam travadas entre 50 e 200 views e o tráfego vindo da FYP despenca para menos de 5% a 10%." },
+          { letter: "b", text: "O perfil ganha 10.000 seguidores em menos de 1 hora." },
+          { letter: "c", text: "Os vídeos começam a receber comentários em outros idiomas." },
+          { letter: "d", text: "A foto de perfil some sem explicação." }
+        ],
+        answer: "a",
+        explanation: "Estagnação abrupta no primeiro lote de visualizações (50 a 200) e ausência de entrega na aba \"Para Você\"."
+      },
+      {
+        id: 34,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "Qual das atitudes abaixo é uma das principais causas para o algoritmo aplicar um Shadowban em uma conta?",
+        options: [
+          { letter: "a", text: "Postar um vídeo gravado na luz do dia com boa qualidade." },
+          { letter: "b", text: "Publicar de 5 a 10 vídeos em sequência rápida (rajadas automáticas) ou postar conteúdos repetidos sem transformação." },
+          { letter: "c", text: "Responder educadamente às perguntas dos seguidores nos comentários." },
+          { letter: "d", text: "Usar uma trilha sonora liberada da biblioteca do aplicativo." }
+        ],
+        answer: "b",
+        explanation: "Postagens em massa automatizadas e envio contínuo de materiais reutilizados acionam o alerta do sistema."
+      },
+      {
+        id: 35,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "Se você suspeita que uma conta sofreu restrição, qual é o teste rápido sugerido no guia?",
+        options: [
+          { letter: "a", text: "Apagar a conta imediatamente e trocar de celular." },
+          { letter: "b", text: "Postar um vídeo totalmente neutro (sem temas ou hashtags polêmicas) e verificar se, após 30 a 90 minutos, ele consegue chegar à aba \"Para Você\"." },
+          { letter: "c", text: "Criar 10 contas no mesmo minuto para testar se funcionam." },
+          { letter: "d", text: "Deixar o telefone desligado por uma semana." }
+        ],
+        answer: "b",
+        explanation: "Publicar um conteúdo neutro e observar se ele atinge a FYP dentro de 30 a 90 minutos."
+      },
+      {
+        id: 36,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "De acordo com o protocolo de recuperação, o que o criador deve fazer ao confirmar que a conta foi temporariamente reduzida pelo algoritmo?",
+        options: [
+          { letter: "a", text: "Postar 20 vídeos seguidos para forçar o aplicativo a entregar o conteúdo." },
+          { letter: "b", text: "Pausar as postagens por 48 a 72 horas, apagar vídeos que violaram regras e voltar postando devagar (1 a 2 vídeos limpos por dia)." },
+          { letter: "c", text: "Reclamar nos comentários de outros influenciadores famosos." },
+          { letter: "d", text: "Trocar o nome de usuário dez vezes no mesmo dia." }
+        ],
+        answer: "b",
+        explanation: "Dar uma pausa de 48 a 72 horas para limpar o histórico recente e retomar de forma lenta e orgânica."
+      },
+      {
+        id: 37,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "O que é o TikTok Studio?",
+        options: [
+          { letter: "a", text: "Um jogo oficial de videogame dentro do aplicativo." },
+          { letter: "b", text: "O painel de ferramentas onde o criador consegue analisar dados sobre o público, tempo de visualização e desempenho dos vídeos." },
+          { letter: "c", text: "O estúdio físico onde os donos do aplicativo gravam propagandas." },
+          { letter: "d", text: "Um filtro que transforma fotos comuns em desenhos animados." }
+        ],
+        answer: "b",
+        explanation: "Central de dados analíticos oficial da plataforma para acompanhar o desempenho e as métricas da conta."
+      },
+      {
+        id: 38,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "Quando um influenciador adulto começa a ganhar muito dinheiro com a internet no Brasil, por que ele geralmente prefere abrir uma empresa (Pessoa Jurídica/CNPJ) em vez de receber como Pessoa Física?",
+        options: [
+          { letter: "a", text: "Porque como empresa (Simples Nacional) ele paga impostos bem menores (a partir de 6%) do que na tabela de Pessoa Física (que pode chegar a 27,5%)." },
+          { letter: "b", text: "Porque é proibido para adultos usarem a internet sem ter uma empresa." },
+          { letter: "c", text: "Porque o aplicativo só permite postar vídeos se a pessoa tiver um CNPJ registrado." },
+          { letter: "d", text: "Porque ter uma empresa garante que todos os vídeos fiquem virais." }
+        ],
+        answer: "a",
+        explanation: "Formalizar como Pessoa Jurídica (Simples Nacional) reduz a alíquota de impostos sobre os ganhos de criador em comparação com as taxas de Pessoa Física."
+      },
+      {
+        id: 39,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "O que é uma \"impressão digital digital\" (fingerprint) de um aparelho ou navegador na internet?",
+        options: [
+          { letter: "a", text: "A marca do dedo que a pessoa deixa ao tocar na tela do celular." },
+          { letter: "b", text: "O conjunto de dados técnicos (como modelo, sistema, navegador e endereço de IP) que identifica se várias contas estão vindo do mesmo aparelho ou lugar." },
+          { letter: "c", text: "Uma foto que o aplicativo tira do rosto do usuário a cada login." },
+          { letter: "d", text: "Um aplicativo exclusivo para desenhar na tela." }
+        ],
+        answer: "b",
+        explanation: "Parâmetros técnicos do sistema e da rede que permitem ao algoritmo saber se vários perfis pertencem ao mesmo usuário ou computador."
+      },
+      {
+        id: 40,
+        block: 4,
+        blockTitle: "Regras, Segurança e Cuidados",
+        question: "Qual é a lição mais valiosa para quem deseja ser um criador de conteúdo consciente e responsável?",
+        options: [
+          { letter: "a", text: "Buscar visualizações rápidas a qualquer custo, mesmo copiando o trabalho de outros criadores." },
+          { letter: "b", text: "Ter autenticidade, respeitar regras de direitos autorais, planejar com foco e construir uma relação de confiança com seu público." },
+          { letter: "c", text: "Achar que o número de seguidores define o valor real de uma pessoa no mundo real." },
+          { letter: "d", text: "Gastar todo o tempo nas redes sociais sem cuidar dos estudos e da saúde." }
+        ],
+        answer: "b",
+        explanation: "O sucesso sustentável depende de ética, consistência, respeito às regras e conexão genuína com as pessoas."
+      }
+    ];
+
+    let userAnswers = {};
+    let score = 0;
+    let currentFilter = 'all';
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-list');
+      container.innerHTML = '';
+
+      questionsData.forEach((q) => {
+        const isHidden = currentFilter !== 'all' && q.block !== currentFilter;
+        
+        const card = document.createElement('div');
+        card.className = `question-card ${userAnswers[q.id] ? (userAnswers[q.id].isCorrect ? 'answered-correct' : 'answered-wrong') : ''}`;
+        card.id = `q-card-${q.id}`;
+        card.style.display = isHidden ? 'none' : 'block';
+
+        let optionsHtml = '';
+        q.options.forEach(opt => {
+          let btnClass = 'option-btn';
+          let disabled = '';
+
+          if (userAnswers[q.id]) {
+            disabled = 'disabled';
+            if (userAnswers[q.id].selected === opt.letter) {
+              btnClass += userAnswers[q.id].isCorrect ? ' selected-correct' : ' selected-wrong';
+            } else if (opt.letter === q.answer) {
+              btnClass += ' show-as-correct';
+            }
+          }
+
+          optionsHtml += `
+            <button class="${btnClass}" ${disabled} onclick="handleSelect(${q.id}, '${opt.letter}')">
+              <span class="opt-letter">${opt.letter.toUpperCase()}</span>
+              <span>${opt.text}</span>
+            </button>
+          `;
+        });
+
+        const isAnswered = !!userAnswers[q.id];
+        const isCorrect = isAnswered && userAnswers[q.id].isCorrect;
+
+        card.innerHTML = `
+          <div class="q-header">
+            <span class="q-num">Questão #${q.id}</span>
+            <span class="q-block-tag">Bloco ${q.block}</span>
+          </div>
+          <div class="q-text">${q.question}</div>
+          <div class="options-list" id="opts-${q.id}">
+            ${optionsHtml}
+          </div>
+          <div class="explanation-box ${isCorrect ? 'correct' : 'wrong'}" id="exp-${q.id}" style="${isAnswered ? 'display:block' : 'display:none'}">
+            <strong>${isCorrect ? '🎉 Mandou bem! Correto!' : '💡 Ops! Quase lá...'}</strong>
+            ${q.explanation}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function handleSelect(questionId, selectedLetter) {
+      if (userAnswers[questionId]) return; // already answered
+
+      const q = questionsData.find(item => item.id === questionId);
+      const isCorrect = selectedLetter === q.answer;
+
+      userAnswers[questionId] = {
+        selected: selectedLetter,
+        isCorrect: isCorrect
+      };
+
+      if (isCorrect) {
+        score++;
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 30,
+            spread: 50,
+            origin: { y: 0.8 }
+          });
+        }
+      }
+
+      updateUI();
+      renderQuestions();
+    }
+
+    function updateUI() {
+      const answeredCount = Object.keys(userAnswers).length;
+      document.getElementById('current-score').innerText = score;
+      document.getElementById('answered-count').innerText = answeredCount;
+
+      const pct = (answeredCount / questionsData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+
+      if (answeredCount === questionsData.length) {
+        setTimeout(openResultsModal, 600);
+      }
+    }
+
+    function filterBlock(blockNum) {
+      currentFilter = blockNum;
+      document.querySelectorAll('.tab-btn').forEach((btn, index) => {
+        btn.classList.remove('active');
+        if (blockNum === 'all' && index === 0) btn.classList.add('active');
+        if (blockNum === 1 && index === 1) btn.classList.add('active');
+        if (blockNum === 2 && index === 2) btn.classList.add('active');
+        if (blockNum === 3 && index === 3) btn.classList.add('active');
+        if (blockNum === 4 && index === 4) btn.classList.add('active');
+      });
+      renderQuestions();
+    }
+
+    function openResultsModal() {
+      const modal = document.getElementById('results-modal');
+      const student = document.getElementById('student-name').value.trim() || "Estudante";
+      const totalAnswered = Object.keys(userAnswers).length;
+      const wrongs = totalAnswered - score;
+      const percentage = totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0;
+
+      document.getElementById('modal-score-val').innerHTML = `${score} <span>/ ${questionsData.length} acertos</span>`;
+      document.getElementById('stat-correct').innerText = score;
+      document.getElementById('stat-wrong').innerText = wrongs;
+      document.getElementById('stat-percent').innerText = `${percentage}%`;
+      document.getElementById('stat-student').innerText = student.split(' ')[0];
+
+      const trophyEl = document.getElementById('modal-trophy');
+      const rankEl = document.getElementById('modal-rank');
+      const titleEl = document.getElementById('modal-title');
+
+      if (score >= 35) {
+        trophyEl.innerText = "👑";
+        titleEl.innerText = "Nível Mestre Supremo!";
+        rankEl.innerText = "Influenciador Viral 🌟🌟🌟";
+      } else if (score >= 28) {
+        trophyEl.innerText = "🚀";
+        titleEl.innerText = "Parabéns, Excelente!";
+        rankEl.innerText = "Criador em Alta 🔥";
+      } else if (score >= 20) {
+        trophyEl.innerText = "🎬";
+        titleEl.innerText = "Muito Bom!";
+        rankEl.innerText = "Criador Promissor 📈";
+      } else {
+        trophyEl.innerText = "🌱";
+        titleEl.innerText = "Continue Praticando!";
+        rankEl.innerText = "Iniciante dos Vídeos 💡";
+      }
+
+      modal.style.display = 'flex';
+
+      if (score >= 25 && typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function closeResultsModal() {
+      document.getElementById('results-modal').style.display = 'none';
+    }
+
+    function shareToWhatsApp() {
+      const student = document.getElementById('student-name').value.trim() || "Aluno(a)";
+      const total = questionsData.length;
+      const pct = Math.round((score / total) * 100);
+
+      const msg = `🚀 *Desafio Criador de Conteúdo - TikTok Quiz*\n\n` +
+                  `👤 *Aluno(a):* ${student}\n` +
+                  `✅ *Acertos:* ${score} de ${total} (${pct}%)\n` +
+                  `🏆 *Status:* Concluído com sucesso!\n\n` +
+                  `_Relatório gerado pelo Quiz Interativo_`;
+
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuestions();
+      updateUI();
+    });
+  </script>
+</body>
+</html>
