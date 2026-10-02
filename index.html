@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Desafio Criador de Conteúdo 🚀 TikTok Quiz</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -474,12 +474,12 @@
       transform: scale(0.95);
     }
 
-    /* Results Modal */
+    /* Results Modal Screen */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(10px);
       z-index: 200;
       display: none;
       align-items: center;
@@ -492,24 +492,31 @@
       background: #191b24;
       border: 1px solid #33394d;
       border-radius: var(--radius-lg);
-      max-width: 480px;
+      max-width: 500px;
       width: 100%;
       padding: 24px 20px;
       text-align: center;
-      max-height: 90vh;
+      max-height: 92vh;
       overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     }
 
     .modal-trophy {
       font-size: 3.5rem;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       animation: bounce 1s infinite alternate;
     }
 
     @keyframes bounce {
       from { transform: translateY(0); }
       to { transform: translateY(-8px); }
+    }
+
+    .modal-student-greeting {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
     }
 
     .modal-title {
@@ -522,16 +529,23 @@
       -webkit-text-fill-color: transparent;
     }
 
+    .modal-feedback-text {
+      font-size: 0.88rem;
+      color: #d1d5db;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
     .modal-score-big {
       font-size: 2.8rem;
       font-family: 'Outfit', sans-serif;
       font-weight: 900;
       color: #fff;
-      margin: 10px 0;
+      margin: 8px 0;
     }
 
     .modal-score-big span {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--text-muted);
     }
 
@@ -551,7 +565,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .stat-item {
@@ -562,7 +576,7 @@
     }
 
     .stat-item .val {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #fff;
     }
@@ -572,8 +586,71 @@
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
+      margin-top: 2px;
     }
 
+    /* Retry / Recovery Box (for < 50%) */
+    .retry-card {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .retry-card h4 {
+      color: #fb7185;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .retry-card p {
+      color: #fecdd3;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .retry-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-retry-wrongs {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      color: #fff;
+      font-weight: 800;
+      border: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .btn-retry-all {
+      background: #252836;
+      color: #d1d5db;
+      font-weight: 700;
+      border: 1px solid #3b4256;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    /* Modal Main Buttons */
     .modal-actions {
       display: flex;
       flex-direction: column;
@@ -594,6 +671,7 @@
       justify-content: center;
       gap: 8px;
       font-size: 0.95rem;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
     }
 
     .btn-secondary {
@@ -631,7 +709,7 @@
     <!-- Student Name Card -->
     <section class="student-card">
       <h2>👤 Identificação do Aluno(a)</h2>
-      <p>Digite seu nome para registrar sua pontuação e gerar seu certificado no final:</p>
+      <p>Digite seu nome para registrar sua pontuação e receber seus parabéns no final:</p>
       <div class="student-input-group">
         <input type="text" id="student-name" class="student-input" placeholder="Ex: Lucas Silva - 7º Ano B" />
       </div>
@@ -639,11 +717,12 @@
 
     <!-- Block navigation tabs -->
     <div class="block-tabs">
-      <button class="tab-btn active" onclick="filterBlock('all')">🎯 Todas (40)</button>
-      <button class="tab-btn" onclick="filterBlock(1)">🌟 Bloco 1 (1-10)</button>
-      <button class="tab-btn" onclick="filterBlock(2)">💰 Bloco 2 (11-20)</button>
-      <button class="tab-btn" onclick="filterBlock(3)">🎬 Bloco 3 (21-30)</button>
-      <button class="tab-btn" onclick="filterBlock(4)">🛡️ Bloco 4 (31-40)</button>
+      <button class="tab-btn active" id="tab-all" onclick="filterBlock('all')">🎯 Todas (40)</button>
+      <button class="tab-btn" id="tab-1" onclick="filterBlock(1)">🌟 Bloco 1 (1-10)</button>
+      <button class="tab-btn" id="tab-2" onclick="filterBlock(2)">💰 Bloco 2 (11-20)</button>
+      <button class="tab-btn" id="tab-3" onclick="filterBlock(3)">🎬 Bloco 3 (21-30)</button>
+      <button class="tab-btn" id="tab-4" onclick="filterBlock(4)">🛡️ Bloco 4 (31-40)</button>
+      <button class="tab-btn" id="tab-wrongs" style="display:none; border-color: #f43f5e; color: #fb7185;" onclick="filterBlock('wrongs')">❌ Refazer Erradas</button>
     </div>
 
     <!-- Questions Container -->
@@ -659,11 +738,14 @@
     <button class="btn-finish" onclick="openResultsModal()">Ver Resultado 🏆</button>
   </footer>
 
-  <!-- Results Modal -->
+  <!-- Results Modal Screen -->
   <div class="modal-overlay" id="results-modal">
     <div class="modal-card">
       <div class="modal-trophy" id="modal-trophy">🏆</div>
-      <h3 class="modal-title" id="modal-title">Incrível!</h3>
+      <div class="modal-student-greeting" id="modal-greeting">Parabéns!</div>
+      <h3 class="modal-title" id="modal-title">Excelente Desempenho!</h3>
+      <p class="modal-feedback-text" id="modal-feedback-desc"></p>
+      
       <div class="modal-badge-rank" id="modal-rank">Criador Lendário 🌟</div>
       
       <div class="modal-score-big" id="modal-score-val">
@@ -684,8 +766,22 @@
           <div class="lbl">Aproveitamento 📊</div>
         </div>
         <div class="stat-item">
-          <div class="val" id="stat-student">Aluno</div>
-          <div class="lbl">Nome</div>
+          <div class="val" id="stat-status">Status</div>
+          <div class="lbl">Avaliação 🎯</div>
+        </div>
+      </div>
+
+      <!-- Area de Recuperacao e Refazer (Quando erra 50% ou mais) -->
+      <div class="retry-card" id="retry-section" style="display: none;">
+        <h4>⚠️ Espaço de Recuperação</h4>
+        <p>Você errou 50% ou mais das questões. Não desanime! Grandes criadores aprendem com os erros. Escolha uma opção para subir sua nota:</p>
+        <div class="retry-actions">
+          <button class="btn-retry-wrongs" onclick="retryOnlyWrongs()">
+            🎯 Refazer Apenas as Questões que Errou
+          </button>
+          <button class="btn-retry-all" onclick="resetAllQuiz()">
+            🔄 Reiniciar Desafio Completo (Do Zero)
+          </button>
         </div>
       </div>
 
@@ -755,7 +851,7 @@
         question: "O bilionário Warren Buffett tinha pavor de falar em público quando jovem, mas fez um curso e enfrentou o medo. O que esse exemplo nos ensina sobre construir uma marca forte?",
         options: [
           { letter: "a", text: "Que devemos fingir que não temos defeitos para parecer perfeitos." },
-          { letter: "b", Que marcas fortes reconhecem suas fraquezas e enfrentam o desconforto para superá-las." },
+          { letter: "b", text: "Que marcas fortes reconhecem suas fraquezas e enfrentam o desconforto para superá-las." },
           { letter: "c", text: "Que quem tem vergonha nunca deve tentar produzir conteúdo." },
           { letter: "d", text: "Que apenas quem nasce sem medo de câmera consegue ter sucesso." }
         ],
@@ -1333,8 +1429,28 @@
       const container = document.getElementById('questions-list');
       container.innerHTML = '';
 
+      // Count wrongs to toggle "Refazer Erradas" tab visibility
+      const wrongIds = Object.keys(userAnswers).filter(id => !userAnswers[id].isCorrect);
+      const wrongsTab = document.getElementById('tab-wrongs');
+      if (wrongsTab) {
+        if (wrongIds.length > 0) {
+          wrongsTab.style.display = 'inline-flex';
+          wrongsTab.innerText = `❌ Erradas (${wrongIds.length})`;
+        } else {
+          wrongsTab.style.display = 'none';
+        }
+      }
+
       questionsData.forEach((q) => {
-        const isHidden = currentFilter !== 'all' && q.block !== currentFilter;
+        let isHidden = false;
+        if (currentFilter === 'all') {
+          isHidden = false;
+        } else if (currentFilter === 'wrongs') {
+          // Show only questions answered wrong
+          isHidden = !(userAnswers[q.id] && !userAnswers[q.id].isCorrect);
+        } else {
+          isHidden = q.block !== currentFilter;
+        }
         
         const card = document.createElement('div');
         card.className = `question-card ${userAnswers[q.id] ? (userAnswers[q.id].isCorrect ? 'answered-correct' : 'answered-wrong') : ''}`;
@@ -1412,8 +1528,8 @@
         score++;
         if (typeof confetti === 'function') {
           confetti({
-            particleCount: 30,
-            spread: 50,
+            particleCount: 25,
+            spread: 45,
             origin: { y: 0.8 }
           });
         }
@@ -1438,76 +1554,134 @@
 
     function filterBlock(blockNum) {
       currentFilter = blockNum;
-      document.querySelectorAll('.tab-btn').forEach((btn, index) => {
+      document.querySelectorAll('.tab-btn').forEach((btn) => {
         btn.classList.remove('active');
-        if (blockNum === 'all' && index === 0) btn.classList.add('active');
-        if (blockNum === 1 && index === 1) btn.classList.add('active');
-        if (blockNum === 2 && index === 2) btn.classList.add('active');
-        if (blockNum === 3 && index === 3) btn.classList.add('active');
-        if (blockNum === 4 && index === 4) btn.classList.add('active');
       });
+
+      if (blockNum === 'all') document.getElementById('tab-all')?.classList.add('active');
+      else if (blockNum === 1) document.getElementById('tab-1')?.classList.add('active');
+      else if (blockNum === 2) document.getElementById('tab-2')?.classList.add('active');
+      else if (blockNum === 3) document.getElementById('tab-3')?.classList.add('active');
+      else if (blockNum === 4) document.getElementById('tab-4')?.classList.add('active');
+      else if (blockNum === 'wrongs') document.getElementById('tab-wrongs')?.classList.add('active');
+
       renderQuestions();
     }
 
     function openResultsModal() {
       const modal = document.getElementById('results-modal');
-      const student = document.getElementById('student-name').value.trim() || "Estudante";
+      const studentNameInput = document.getElementById('student-name').value.trim();
+      const student = studentNameInput || "Criador(a)";
       const totalAnswered = Object.keys(userAnswers).length;
       const wrongs = totalAnswered - score;
-      const percentage = totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0;
+      const totalQuestions = questionsData.length;
+      
+      // Calculate performance percentage based on total questions (or answered so far)
+      const percentage = totalAnswered > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+      const errorRate = totalAnswered > 0 ? ((wrongs / totalQuestions) * 100) : 0;
 
-      document.getElementById('modal-score-val').innerHTML = `${score} <span>/ ${questionsData.length} acertos</span>`;
+      document.getElementById('modal-score-val').innerHTML = `${score} <span>/ ${totalQuestions} acertos</span>`;
       document.getElementById('stat-correct').innerText = score;
       document.getElementById('stat-wrong').innerText = wrongs;
       document.getElementById('stat-percent').innerText = `${percentage}%`;
-      document.getElementById('stat-student').innerText = student.split(' ')[0];
 
+      const greetingEl = document.getElementById('modal-greeting');
       const trophyEl = document.getElementById('modal-trophy');
       const rankEl = document.getElementById('modal-rank');
       const titleEl = document.getElementById('modal-title');
+      const descEl = document.getElementById('modal-feedback-desc');
+      const statusEl = document.getElementById('stat-status');
+      const retrySection = document.getElementById('retry-section');
 
-      if (score >= 35) {
-        trophyEl.innerText = "👑";
-        titleEl.innerText = "Nível Mestre Supremo!";
-        rankEl.innerText = "Influenciador Viral 🌟🌟🌟";
-      } else if (score >= 28) {
-        trophyEl.innerText = "🚀";
-        titleEl.innerText = "Parabéns, Excelente!";
-        rankEl.innerText = "Criador em Alta 🔥";
-      } else if (score >= 20) {
-        trophyEl.innerText = "🎬";
-        titleEl.innerText = "Muito Bom!";
-        rankEl.innerText = "Criador Promissor 📈";
+      greetingEl.innerText = `Parabéns pela dedicação, ${student}! 👏`;
+
+      // Condition: Se errou 50% ou mais (acertos < 20 ou taxa de erro >= 50%)
+      const isFailedOrNeedsRetry = (score < 20) || (percentage < 50);
+
+      if (!isFailedOrNeedsRetry) {
+        // >= 50% APROVADO COM PARABÉNS
+        retrySection.style.display = 'none';
+        statusEl.innerText = "Aprovado 🌟";
+        statusEl.style.color = "var(--correct)";
+
+        if (score >= 36) {
+          trophyEl.innerText = "👑";
+          titleEl.innerText = "Nível Mestre Supremo do TikTok!";
+          rankEl.innerText = "Influenciador Viral 🌟🌟🌟";
+          descEl.innerText = "Você demonstrou domínio absoluto sobre marcas, monetização, edição e regras do algoritmo. Você está pronto para bombar na internet com responsabilidade!";
+        } else if (score >= 28) {
+          trophyEl.innerText = "🚀";
+          titleEl.innerText = "Sensacional! Mandou Muito Bem!";
+          rankEl.innerText = "Criador em Alta 🔥";
+          descEl.innerText = "Seu conhecimento está afiadíssimo! Você compreendeu muito bem os segredos de retenção, edição dinâmica e os cuidados para não levar shadowban.";
+        } else {
+          trophyEl.innerText = "🎉";
+          titleEl.innerText = "Parabéns! Você Foi Aprovado!";
+          rankEl.innerText = "Criador Promissor 📈";
+          descEl.innerText = "Excelente esforço! Você superou a meta de 50% de acertos e está no caminho certo para criar conteúdos de sucesso!";
+        }
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 120,
+            spread: 80,
+            origin: { y: 0.6 }
+          });
+        }
       } else {
-        trophyEl.innerText = "🌱";
-        titleEl.innerText = "Continue Praticando!";
-        rankEl.innerText = "Iniciante dos Vídeos 💡";
+        // < 50% (ERROU 50% OU MAIS) - MOSTRA ESPAÇO PARA REFAZER
+        trophyEl.innerText = "🎮";
+        titleEl.innerText = "Quase lá! Vamos treinar mais?";
+        rankEl.innerText = "Em Treinamento 💡";
+        statusEl.innerText = "Recuperação 🔄";
+        statusEl.style.color = "var(--wrong)";
+        descEl.innerText = `Você atingiu ${percentage}% de acertos (${score} de ${totalQuestions}). Todo grande influenciador já errou no começo antes de viralizar. Use o espaço abaixo para refazer e melhorar sua pontuação!`;
+        
+        retrySection.style.display = 'block';
       }
 
       modal.style.display = 'flex';
-
-      if (score >= 25 && typeof confetti === 'function') {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      }
     }
 
     function closeResultsModal() {
       document.getElementById('results-modal').style.display = 'none';
     }
 
+    function retryOnlyWrongs() {
+      // Clear answers for the ones answered incorrectly
+      Object.keys(userAnswers).forEach(id => {
+        if (!userAnswers[id].isCorrect) {
+          delete userAnswers[id];
+        }
+      });
+
+      closeResultsModal();
+      filterBlock('wrongs');
+      updateUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetAllQuiz() {
+      if (confirm("Deseja realmente reiniciar todo o Desafio do zero?")) {
+        userAnswers = {};
+        score = 0;
+        closeResultsModal();
+        filterBlock('all');
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
     function shareToWhatsApp() {
       const student = document.getElementById('student-name').value.trim() || "Aluno(a)";
       const total = questionsData.length;
       const pct = Math.round((score / total) * 100);
+      const status = score >= 20 ? "Aprovado(a) 🌟" : "Em Treinamento / Recuperação 🔄";
 
       const msg = `🚀 *Desafio Criador de Conteúdo - TikTok Quiz*\n\n` +
                   `👤 *Aluno(a):* ${student}\n` +
-                  `✅ *Acertos:* ${score} de ${total} (${pct}%)\n` +
-                  `🏆 *Status:* Concluído com sucesso!\n\n` +
+                  `✅ *Pontuação:* ${score} de ${total} acertos (${pct}%)\n` +
+                  `🎯 *Resultado:* ${status}\n\n` +
                   `_Relatório gerado pelo Quiz Interativo_`;
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
