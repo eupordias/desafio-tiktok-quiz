@@ -10,9 +10,9 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      --bg-dark: #0f1015;
-      --card-bg: #191b24;
-      --card-border: #282c3c;
+      --bg-dark: #0b0c10;
+      --card-bg: #151821;
+      --card-border: #262a38;
       --accent-cyan: #00f2fe;
       --accent-pink: #fe2c55;
       --accent-purple: #7928ca;
@@ -40,22 +40,139 @@
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      padding-bottom: 90px;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 10% 20%, rgba(254, 44, 85, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(0, 242, 254, 0.08) 0%, transparent 40%);
+        radial-gradient(circle at 10% 20%, rgba(254, 44, 85, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 242, 254, 0.1) 0%, transparent 40%);
     }
 
+    /* TELA INICIAL DE BLOQUEIO / REGISTRO */
+    #welcome-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 12, 16, 0.98);
+      backdrop-filter: blur(16px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .welcome-card {
+      background: var(--card-bg);
+      border: 2px solid #33394d;
+      border-radius: var(--radius-lg);
+      padding: 28px 22px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .welcome-icon {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .welcome-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.25;
+    }
+
+    .welcome-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 22px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .welcome-input {
+      width: 100%;
+      background: #0d0e14;
+      border: 1.5px solid #2f3547;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      padding: 13px 15px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .welcome-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.25);
+    }
+
+    .btn-start-quiz {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent-pink), #7928ca);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 900;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(254, 44, 85, 0.4);
+      transition: transform 0.15s;
+    }
+
+    .btn-start-quiz:active {
+      transform: scale(0.98);
+    }
+
+    .error-msg {
+      color: #f43f5e;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 6px;
+      display: none;
+    }
+
+    /* HEADER */
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 16, 21, 0.88);
+      background: rgba(11, 12, 16, 0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--card-border);
-      padding: 12px 16px;
+      padding: 10px 16px;
     }
 
     .header-top {
@@ -71,31 +188,36 @@
       gap: 8px;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       background: linear-gradient(135deg, #fff, #9ca3af);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .logo-badge span.icon {
-      background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
-      border-radius: 8px;
-      padding: 4px 6px;
-      font-size: 0.9rem;
-      -webkit-text-fill-color: initial;
+    .student-badge-header {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 6px;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .score-badge {
       background: linear-gradient(135deg, rgba(254, 44, 85, 0.2), rgba(0, 242, 254, 0.2));
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 50px;
-      padding: 4px 12px;
+      padding: 4px 10px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .progress-bar-container {
@@ -103,7 +225,7 @@
       height: 6px;
       background: #252836;
       border-radius: 99px;
-      margin-top: 10px;
+      margin-top: 8px;
       overflow: hidden;
     }
 
@@ -119,53 +241,7 @@
       max-width: 680px;
       margin: 0 auto;
       padding: 16px;
-    }
-
-    /* Student Info Box */
-    .student-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-
-    .student-card h2 {
-      font-size: 1.1rem;
-      font-family: 'Outfit', sans-serif;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .student-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .student-input-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .student-input {
-      flex: 1;
-      background: #0f1015;
-      border: 1px solid #33394d;
-      border-radius: var(--radius-sm);
-      color: #fff;
-      padding: 10px 14px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .student-input:focus {
-      border-color: var(--accent-cyan);
+      padding-bottom: 90px;
     }
 
     /* Block filter pill tabs */
@@ -366,7 +442,6 @@
       transform: scale(0.98);
     }
 
-    /* Status classes when answered */
     .option-btn.selected-correct {
       background: var(--correct-bg) !important;
       border-color: var(--correct) !important;
@@ -433,13 +508,13 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Floating / Sticky Footer summary */
+    /* Bottom Floating Nav */
     .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(15, 16, 21, 0.95);
+      background: rgba(11, 12, 16, 0.95);
       backdrop-filter: blur(14px);
       border-top: 1px solid var(--card-border);
       padding: 12px 16px;
@@ -474,13 +549,13 @@
       transform: scale(0.95);
     }
 
-    /* Results Modal Screen */
+    /* TELA FINAL DE RESULTADO & CERTIFICADO (OTIMIZADO PARA PRINT) */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(10px);
-      z-index: 200;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 600;
       display: none;
       align-items: center;
       justify-content: center;
@@ -488,75 +563,109 @@
       animation: fadeIn 0.2s ease;
     }
 
-    .modal-card {
-      background: #191b24;
-      border: 1px solid #33394d;
+    .certificate-card {
+      background: #151822;
+      border: 2px solid #3b4256;
       border-radius: var(--radius-lg);
-      max-width: 500px;
+      max-width: 480px;
       width: 100%;
-      padding: 24px 20px;
+      padding: 22px 18px;
       text-align: center;
-      max-height: 92vh;
+      max-height: 94vh;
       overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+      position: relative;
+    }
+
+    .cert-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(254,44,85,0.2), rgba(0,242,254,0.2));
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+
+    /* NOME COMPLETO EM DESTAQUE NO PRINT */
+    .student-print-box {
+      background: #0d0e14;
+      border: 1.5px solid #2f3547;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .student-print-label {
+      font-size: 0.7rem;
+      color: var(--accent-cyan);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .student-print-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      word-break: break-word;
+    }
+
+    .student-print-class {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     .modal-trophy {
-      font-size: 3.5rem;
-      margin-bottom: 8px;
+      font-size: 3.2rem;
+      margin: 4px 0;
       animation: bounce 1s infinite alternate;
-    }
-
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-8px); }
-    }
-
-    .modal-student-greeting {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 4px;
     }
 
     .modal-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.35rem;
       font-weight: 900;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .modal-feedback-text {
-      font-size: 0.88rem;
-      color: #d1d5db;
-      line-height: 1.45;
-      margin-bottom: 14px;
-    }
-
     .modal-score-big {
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       font-family: 'Outfit', sans-serif;
       font-weight: 900;
       color: #fff;
-      margin: 8px 0;
+      margin: 6px 0;
     }
 
     .modal-score-big span {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
     }
 
     .modal-badge-rank {
       display: inline-block;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 50px;
       background: rgba(255,255,255,0.08);
       font-weight: 800;
-      font-size: 0.9rem;
-      margin-bottom: 16px;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
       color: var(--accent-cyan);
       border: 1px solid rgba(0,242,254,0.3);
     }
@@ -564,46 +673,64 @@
     .result-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .stat-item {
-      background: #111218;
+      background: #0d0e14;
       border: 1px solid #282c3c;
-      padding: 12px;
+      padding: 10px;
       border-radius: var(--radius-sm);
     }
 
     .stat-item .val {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #fff;
     }
 
     .stat-item .lbl {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
       margin-top: 2px;
     }
 
-    /* Retry / Recovery Box (for < 50%) */
-    .retry-card {
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid rgba(244, 63, 94, 0.4);
+    /* Stamp Date & Code */
+    .cert-footer-stamp {
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.15);
       border-radius: var(--radius-sm);
-      padding: 14px;
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .cert-footer-stamp strong {
+      color: #e2e8f0;
+    }
+
+    /* Retry Card */
+    .retry-card {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1.5px solid rgba(244, 63, 94, 0.4);
+      border-radius: var(--radius-sm);
+      padding: 12px;
       margin-bottom: 16px;
       text-align: left;
     }
 
     .retry-card h4 {
       color: #fb7185;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -611,9 +738,9 @@
 
     .retry-card p {
       color: #fecdd3;
-      font-size: 0.82rem;
-      line-height: 1.4;
-      margin-bottom: 12px;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      margin-bottom: 10px;
     }
 
     .retry-actions {
@@ -627,16 +754,11 @@
       color: #fff;
       font-weight: 800;
       border: none;
-      padding: 10px 14px;
+      padding: 10px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 0.88rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      font-size: 0.85rem;
       box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
-      transition: transform 0.2s;
     }
 
     .btn-retry-all {
@@ -644,17 +766,16 @@
       color: #d1d5db;
       font-weight: 700;
       border: 1px solid #3b4256;
-      padding: 8px 12px;
+      padding: 8px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
     }
 
-    /* Modal Main Buttons */
     .modal-actions {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn-share {
@@ -670,7 +791,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
     }
 
@@ -682,20 +803,58 @@
       padding: 10px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
+    }
+
+    .screenshot-tip {
+      font-size: 0.72rem;
+      color: var(--accent-yellow);
+      margin-top: 8px;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
+  <!-- TELA INICIAL: BLOQUEIO COM REGISTRO DO NOME COMPLETO -->
+  <div id="welcome-screen">
+    <div class="welcome-card">
+      <div class="welcome-icon">🚀</div>
+      <h1 class="welcome-title">Desafio Criador de Conteúdo</h1>
+      <p class="welcome-desc">
+        Teste seus conhecimentos com 40 questões práticas e ganhe seu <strong>Comprovante Oficial de Desempenho</strong> para enviar ao seu professor!
+      </p>
+
+      <div class="input-wrapper">
+        <div>
+          <label class="input-label" for="input-fullname">Nome Completo do Aluno(a): *</label>
+          <input type="text" id="input-fullname" class="welcome-input" placeholder="Digite seu Nome e Sobrenome" autocomplete="name" />
+          <div class="error-msg" id="name-error">Por favor, digite seu nome e sobrenome completo.</div>
+        </div>
+
+        <div>
+          <label class="input-label" for="input-class">Turma / Série / Escola:</label>
+          <input type="text" id="input-class" class="welcome-input" placeholder="Ex: 7º Ano B - Escola Municipal" />
+        </div>
+      </div>
+
+      <button type="button" class="btn-start-quiz" onclick="startQuiz()">
+        ▶️ Começar o Desafio Agora
+      </button>
+    </div>
+  </div>
+
   <!-- Sticky Header -->
   <header>
     <div class="header-top">
       <div class="logo-badge">
-        <span class="icon">📱</span> TikTok Quiz 🚀
+        <span>📱</span> TikTok Quiz
+      </div>
+      <div class="student-badge-header" id="header-student-name">
+        Aluno(a)
       </div>
       <div class="score-badge">
-        <span>⭐</span> Pontos: <span id="current-score">0</span> / 40
+        <span>⭐</span> <span id="current-score">0</span> / 40
       </div>
     </div>
     <div class="progress-bar-container">
@@ -706,15 +865,6 @@
   <!-- Main Content -->
   <main class="main-container">
     
-    <!-- Student Name Card -->
-    <section class="student-card">
-      <h2>👤 Identificação do Aluno(a)</h2>
-      <p>Digite seu nome para registrar sua pontuação e receber seus parabéns no final:</p>
-      <div class="student-input-group">
-        <input type="text" id="student-name" class="student-input" placeholder="Ex: Lucas Silva - 7º Ano B" />
-      </div>
-    </section>
-
     <!-- Block navigation tabs -->
     <div class="block-tabs">
       <button class="tab-btn active" id="tab-all" onclick="filterBlock('all')">🎯 Todas (40)</button>
@@ -738,14 +888,23 @@
     <button class="btn-finish" onclick="openResultsModal()">Ver Resultado 🏆</button>
   </footer>
 
-  <!-- Results Modal Screen -->
+  <!-- TELA FINAL DE RESULTADO & COMPROVANTE (PRINT SEGURO) -->
   <div class="modal-overlay" id="results-modal">
-    <div class="modal-card">
-      <div class="modal-trophy" id="modal-trophy">🏆</div>
-      <div class="modal-student-greeting" id="modal-greeting">Parabéns!</div>
-      <h3 class="modal-title" id="modal-title">Excelente Desempenho!</h3>
-      <p class="modal-feedback-text" id="modal-feedback-desc"></p>
+    <div class="certificate-card">
       
+      <div class="cert-badge-top">
+        🎓 Comprovante Oficial de Conclusão
+      </div>
+
+      <!-- NOME COMPLETO DESTACADO PARA O PRINT -->
+      <div class="student-print-box">
+        <div class="student-print-label">Identificação do Estudante</div>
+        <div class="student-print-name" id="cert-student-name">NOME DO ALUNO</div>
+        <div class="student-print-class" id="cert-student-class">Turma / Série</div>
+      </div>
+
+      <div class="modal-trophy" id="modal-trophy">🏆</div>
+      <h3 class="modal-title" id="modal-title">Desempenho Registrado!</h3>
       <div class="modal-badge-rank" id="modal-rank">Criador Lendário 🌟</div>
       
       <div class="modal-score-big" id="modal-score-val">
@@ -771,7 +930,13 @@
         </div>
       </div>
 
-      <!-- Area de Recuperacao e Refazer (Quando erra 50% ou mais) -->
+      <!-- Carimbo de Data, Hora e Código Anti-Fraude -->
+      <div class="cert-footer-stamp">
+        <div>📅 <span id="cert-timestamp">02/10/2026</span></div>
+        <div>🔒 Cód: <strong id="cert-code">#TK-8849</strong></div>
+      </div>
+
+      <!-- Espaço de Recuperação (< 50%) -->
       <div class="retry-card" id="retry-section" style="display: none;">
         <h4>⚠️ Espaço de Recuperação</h4>
         <p>Você errou 50% ou mais das questões. Não desanime! Grandes criadores aprendem com os erros. Escolha uma opção para subir sua nota:</p>
@@ -780,7 +945,7 @@
             🎯 Refazer Apenas as Questões que Errou
           </button>
           <button class="btn-retry-all" onclick="resetAllQuiz()">
-            🔄 Reiniciar Desafio Completo (Do Zero)
+            🔄 Reiniciar Desafio Completo
           </button>
         </div>
       </div>
@@ -793,10 +958,18 @@
           Revisar Respostas 🔍
         </button>
       </div>
+
+      <div class="screenshot-tip">
+        📸 <strong>Dica para o Aluno:</strong> Tire um print desta tela inteira e envie para o seu professor!
+      </div>
+
     </div>
   </div>
 
   <script>
+    let studentFullName = "";
+    let studentClassInfo = "";
+
     const questionsData = [
       // BLOCO 1
       {
@@ -1411,6 +1584,32 @@
     let score = 0;
     let currentFilter = 'all';
 
+    function startQuiz() {
+      const nameInput = document.getElementById('input-fullname');
+      const classInput = document.getElementById('input-class');
+      const errorMsg = document.getElementById('name-error');
+
+      const nameVal = nameInput.value.trim();
+      const parts = nameVal.split(/\s+/);
+
+      if (!nameVal || parts.length < 2) {
+        errorMsg.style.display = 'block';
+        nameInput.focus();
+        return;
+      }
+
+      errorMsg.style.display = 'none';
+      studentFullName = nameVal;
+      studentClassInfo = classInput.value.trim() || "Estudante";
+
+      // Update header
+      document.getElementById('header-student-name').innerText = studentFullName.split(' ')[0];
+
+      // Hide welcome screen
+      document.getElementById('welcome-screen').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function toggleHint(questionId) {
       const hintBox = document.getElementById(`hint-box-${questionId}`);
       const btn = document.getElementById(`hint-btn-${questionId}`);
@@ -1429,7 +1628,6 @@
       const container = document.getElementById('questions-list');
       container.innerHTML = '';
 
-      // Count wrongs to toggle "Refazer Erradas" tab visibility
       const wrongIds = Object.keys(userAnswers).filter(id => !userAnswers[id].isCorrect);
       const wrongsTab = document.getElementById('tab-wrongs');
       if (wrongsTab) {
@@ -1446,7 +1644,6 @@
         if (currentFilter === 'all') {
           isHidden = false;
         } else if (currentFilter === 'wrongs') {
-          // Show only questions answered wrong
           isHidden = !(userAnswers[q.id] && !userAnswers[q.id].isCorrect);
         } else {
           isHidden = q.block !== currentFilter;
@@ -1489,7 +1686,6 @@
           </div>
           <div class="q-text">${q.question}</div>
           
-          <!-- Espaço de Dica Escondida -->
           <div class="hint-container">
             <button type="button" class="hint-toggle-btn" id="hint-btn-${q.id}" onclick="toggleHint(${q.id})">
               💡 Dica Secreta (Espiar)
@@ -1514,7 +1710,7 @@
     }
 
     function handleSelect(questionId, selectedLetter) {
-      if (userAnswers[questionId]) return; // already answered
+      if (userAnswers[questionId]) return;
 
       const q = questionsData.find(item => item.id === questionId);
       const isCorrect = selectedLetter === q.answer;
@@ -1568,57 +1764,57 @@
       renderQuestions();
     }
 
+    function generateValidationCode() {
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `#TKQ-${rand}`;
+    }
+
     function openResultsModal() {
       const modal = document.getElementById('results-modal');
-      const studentNameInput = document.getElementById('student-name').value.trim();
-      const student = studentNameInput || "Criador(a)";
       const totalAnswered = Object.keys(userAnswers).length;
       const wrongs = totalAnswered - score;
       const totalQuestions = questionsData.length;
-      
-      // Calculate performance percentage based on total questions (or answered so far)
       const percentage = totalAnswered > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-      const errorRate = totalAnswered > 0 ? ((wrongs / totalQuestions) * 100) : 0;
+
+      // Fill Certificate Details for Print
+      document.getElementById('cert-student-name').innerText = (studentFullName || "ALUNO NÃO IDENTIFICADO").toUpperCase();
+      document.getElementById('cert-student-class').innerText = studentClassInfo || "Turma Geral";
+      
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('cert-timestamp').innerText = dateStr;
+      document.getElementById('cert-code').innerText = generateValidationCode();
 
       document.getElementById('modal-score-val').innerHTML = `${score} <span>/ ${totalQuestions} acertos</span>`;
       document.getElementById('stat-correct').innerText = score;
       document.getElementById('stat-wrong').innerText = wrongs;
       document.getElementById('stat-percent').innerText = `${percentage}%`;
 
-      const greetingEl = document.getElementById('modal-greeting');
       const trophyEl = document.getElementById('modal-trophy');
       const rankEl = document.getElementById('modal-rank');
       const titleEl = document.getElementById('modal-title');
-      const descEl = document.getElementById('modal-feedback-desc');
       const statusEl = document.getElementById('stat-status');
       const retrySection = document.getElementById('retry-section');
 
-      greetingEl.innerText = `Parabéns pela dedicação, ${student}! 👏`;
-
-      // Condition: Se errou 50% ou mais (acertos < 20 ou taxa de erro >= 50%)
       const isFailedOrNeedsRetry = (score < 20) || (percentage < 50);
 
       if (!isFailedOrNeedsRetry) {
-        // >= 50% APROVADO COM PARABÉNS
         retrySection.style.display = 'none';
         statusEl.innerText = "Aprovado 🌟";
         statusEl.style.color = "var(--correct)";
 
         if (score >= 36) {
           trophyEl.innerText = "👑";
-          titleEl.innerText = "Nível Mestre Supremo do TikTok!";
+          titleEl.innerText = "Nível Mestre Supremo!";
           rankEl.innerText = "Influenciador Viral 🌟🌟🌟";
-          descEl.innerText = "Você demonstrou domínio absoluto sobre marcas, monetização, edição e regras do algoritmo. Você está pronto para bombar na internet com responsabilidade!";
         } else if (score >= 28) {
           trophyEl.innerText = "🚀";
-          titleEl.innerText = "Sensacional! Mandou Muito Bem!";
+          titleEl.innerText = "Excelente Desempenho!";
           rankEl.innerText = "Criador em Alta 🔥";
-          descEl.innerText = "Seu conhecimento está afiadíssimo! Você compreendeu muito bem os segredos de retenção, edição dinâmica e os cuidados para não levar shadowban.";
         } else {
           trophyEl.innerText = "🎉";
-          titleEl.innerText = "Parabéns! Você Foi Aprovado!";
+          titleEl.innerText = "Parabéns, Aprovado!";
           rankEl.innerText = "Criador Promissor 📈";
-          descEl.innerText = "Excelente esforço! Você superou a meta de 50% de acertos e está no caminho certo para criar conteúdos de sucesso!";
         }
 
         if (typeof confetti === 'function') {
@@ -1629,14 +1825,11 @@
           });
         }
       } else {
-        // < 50% (ERROU 50% OU MAIS) - MOSTRA ESPAÇO PARA REFAZER
         trophyEl.innerText = "🎮";
         titleEl.innerText = "Quase lá! Vamos treinar mais?";
         rankEl.innerText = "Em Treinamento 💡";
         statusEl.innerText = "Recuperação 🔄";
         statusEl.style.color = "var(--wrong)";
-        descEl.innerText = `Você atingiu ${percentage}% de acertos (${score} de ${totalQuestions}). Todo grande influenciador já errou no começo antes de viralizar. Use o espaço abaixo para refazer e melhorar sua pontuação!`;
-        
         retrySection.style.display = 'block';
       }
 
@@ -1648,7 +1841,6 @@
     }
 
     function retryOnlyWrongs() {
-      // Clear answers for the ones answered incorrectly
       Object.keys(userAnswers).forEach(id => {
         if (!userAnswers[id].isCorrect) {
           delete userAnswers[id];
@@ -1662,7 +1854,7 @@
     }
 
     function resetAllQuiz() {
-      if (confirm("Deseja realmente reiniciar todo o Desafio do zero?")) {
+      if (confirm("Deseja reiniciar todo o Desafio do zero?")) {
         userAnswers = {};
         score = 0;
         closeResultsModal();
@@ -1673,22 +1865,25 @@
     }
 
     function shareToWhatsApp() {
-      const student = document.getElementById('student-name').value.trim() || "Aluno(a)";
+      const student = studentFullName || "Aluno(a)";
+      const turma = studentClassInfo || "";
       const total = questionsData.length;
       const pct = Math.round((score / total) * 100);
-      const status = score >= 20 ? "Aprovado(a) 🌟" : "Em Treinamento / Recuperação 🔄";
+      const status = score >= 20 ? "Aprovado(a) 🌟" : "Em Recuperação 🔄";
+      const code = document.getElementById('cert-code').innerText;
 
-      const msg = `🚀 *Desafio Criador de Conteúdo - TikTok Quiz*\n\n` +
+      const msg = `🚀 *COMPROVANTE DE DESEMPENHO - TIKTOK QUIZ*\n\n` +
                   `👤 *Aluno(a):* ${student}\n` +
+                  `🏫 *Turma/Escola:* ${turma}\n` +
                   `✅ *Pontuação:* ${score} de ${total} acertos (${pct}%)\n` +
-                  `🎯 *Resultado:* ${status}\n\n` +
+                  `🎯 *Resultado:* ${status}\n` +
+                  `🔒 *Código de Validação:* ${code}\n\n` +
                   `_Relatório gerado pelo Quiz Interativo_`;
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank');
     }
 
-    // Initialize immediately & on DOM ready
     function initApp() {
       renderQuestions();
       updateUI();
