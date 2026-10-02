@@ -1688,11 +1688,17 @@
       window.open(url, '_blank');
     }
 
-    // Initialize
-    window.addEventListener('DOMContentLoaded', () => {
+    // Initialize immediately & on DOM ready
+    function initApp() {
       renderQuestions();
       updateUI();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
